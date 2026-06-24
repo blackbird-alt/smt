@@ -12,10 +12,18 @@ dist
 dist-ssr
 *.local
 
-# Local env files (Firebase config)
+# Local env files / secrets (keep the committed template)
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+
+# Service-account / credential files (never commit)
+*.pem
+*.key
+serviceAccount*.json
+**/serviceAccountKey*.json
+google-services.json
+GoogleService-Info.plist
 
 # Firebase deploy cache
 .firebase/
