@@ -292,5 +292,55 @@
       "title": "Chapter 5 complete",
       "body": "You connected normal models, z-scores, shaded areas, and sampling distributions to answer individual and sample-mean probability questions.\n\nNext up: estimation with confidence intervals, margin of error, and sample-size planning."
     }
+  ],
+  "review": [
+    {
+      "id": "r5-1",
+      "type": "number-input",
+      "title": "Compute a z-score",
+      "context": "A score of **85** in a distribution with mean **70** and SD **5**.",
+      "prompt": "What is its z-score?",
+      "correct": 3,
+      "tolerance": 0.01,
+      "hints": ["z = (x − mean) ÷ SD.", "(85 − 70) ÷ 5 = ?"],
+      "feedback": { "wrong": "Use z = (x − mean) ÷ SD." },
+      "solution": {
+        "body": "z = (85 − 70) ÷ 5 = **3**.",
+        "takeaway": "A z-score is distance from the mean in standard deviations."
+      }
+    },
+    {
+      "id": "r5-2",
+      "type": "tap-choice",
+      "title": "Empirical rule",
+      "context": "Data are roughly normal.",
+      "prompt": "About what percent falls within 2 standard deviations of the mean?",
+      "options": [
+        { "id": "a", "label": "About 95%", "correct": true },
+        { "id": "b", "label": "About 68%" },
+        { "id": "c", "label": "About 99.7%" }
+      ],
+      "hints": ["Recall 68–95–99.7.", "Two SD corresponds to the middle figure."],
+      "feedback": { "wrong": "The 68–95–99.7 rule: 2 SD ≈ 95%." },
+      "solution": {
+        "body": "By the empirical rule, about **95%** of values lie within 2 SD of the mean.",
+        "takeaway": "68% within 1 SD, 95% within 2 SD, 99.7% within 3 SD."
+      }
+    },
+    {
+      "id": "r5-3",
+      "type": "number-input",
+      "title": "Standard error",
+      "context": "Population SD **σ = 20**, sample size **n = 100**.",
+      "prompt": "Compute the standard error of the mean (σ / √n).",
+      "correct": 2,
+      "tolerance": 0.01,
+      "hints": ["SE = σ ÷ √n.", "20 ÷ √100 = 20 ÷ 10."],
+      "feedback": { "wrong": "Use SE = σ ÷ √n." },
+      "solution": {
+        "body": "SE = 20 ÷ √100 = 20 ÷ 10 = **2**.",
+        "takeaway": "Larger samples shrink the standard error by √n."
+      }
+    }
   ]
 }

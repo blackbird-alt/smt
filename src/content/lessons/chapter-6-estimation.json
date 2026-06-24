@@ -334,5 +334,56 @@
       "title": "Chapter 6 complete",
       "body": "You built estimation workflows from point estimates to confidence intervals, margin of error, and sample-size planning.\n\nYou can now move from raw samples to defensible statistical claims with quantified uncertainty."
     }
+  ],
+  "review": [
+    {
+      "id": "r6-1",
+      "type": "number-input",
+      "title": "Margin of error",
+      "context": "A 95% interval with **z* = 1.96**, **σ = 20**, **n = 16**.",
+      "prompt": "Compute the margin of error z* × (σ / √n).",
+      "correct": 9.8,
+      "decimalPlaces": 1,
+      "tolerance": 0.1,
+      "hints": ["MOE = z* × σ/√n.", "1.96 × (20 ÷ 4)."],
+      "feedback": { "wrong": "Multiply z* by the standard error σ / √n." },
+      "solution": {
+        "body": "MOE = 1.96 × (20 ÷ √16) = 1.96 × 5 = **9.8**.",
+        "takeaway": "Margin of error = z* × standard error."
+      }
+    },
+    {
+      "id": "r6-2",
+      "type": "tap-choice",
+      "title": "Reading a confidence interval",
+      "context": "A 95% confidence interval for a mean is **[12, 18]**.",
+      "prompt": "Is 20 a plausible value for the true mean at this level?",
+      "options": [
+        { "id": "no", "label": "No — 20 is outside the interval", "correct": true },
+        { "id": "yes", "label": "Yes — 20 is close enough" },
+        { "id": "cant", "label": "A CI can't tell you that" }
+      ],
+      "hints": ["A value is plausible only if it lies inside the interval.", "Is 20 between 12 and 18?"],
+      "feedback": { "wrong": "Only values inside the interval are plausible at that level." },
+      "solution": {
+        "body": "20 lies **outside** [12, 18], so it is not a plausible value at the 95% level.",
+        "takeaway": "A CI is the range of plausible parameter values; outside it is implausible."
+      }
+    },
+    {
+      "id": "r6-3",
+      "type": "number-input",
+      "title": "Interval endpoint",
+      "context": "A sample mean **x̄ = 50** with margin of error **4**.",
+      "prompt": "What is the upper endpoint of the confidence interval?",
+      "correct": 54,
+      "tolerance": 0.01,
+      "hints": ["Upper endpoint = x̄ + MOE.", "50 + 4 = ?"],
+      "feedback": { "wrong": "Add the margin of error to the estimate." },
+      "solution": {
+        "body": "Upper endpoint = 50 + 4 = **54** (the lower would be 46).",
+        "takeaway": "A confidence interval is estimate ± margin of error."
+      }
+    }
   ]
 }

@@ -404,5 +404,61 @@
       "title": "Chapter 1 complete",
       "body": "You chose the right center for decisions, felt outlier sensitivity, computed weighted means and SD, used z-scores, and applied the IQR rule.\n\n*Next up:* scatterplots, correlation, and why r ≠ causation."
     }
+  ],
+  "review": [
+    {
+      "id": "r1-1",
+      "type": "tap-choice",
+      "title": "Mean vs median",
+      "context": "Data: **3, 5, 7, 9, 21**.",
+      "prompt": "Which is larger — the mean or the median?",
+      "options": [
+        { "id": "mean", "label": "Mean", "correct": true },
+        { "id": "median", "label": "Median" },
+        { "id": "equal", "label": "They're equal" }
+      ],
+      "hints": [
+        "Find both: the median is the middle of the sorted list; the mean adds all values and divides by 5.",
+        "Median = 7. Mean = 45 / 5 = 9 — the 21 pulls the mean up."
+      ],
+      "feedback": { "wrong": "Compute both — the large value 21 drags one of them upward." },
+      "solution": {
+        "body": "Median = **7**, mean = 45 / 5 = **9**. The outlier 21 pulls the mean above the median.",
+        "takeaway": "A high outlier pulls the mean toward it while the median resists."
+      }
+    },
+    {
+      "id": "r1-2",
+      "type": "number-input",
+      "title": "Find the median",
+      "context": "Values: **4, 8, 6, 10, 2**.",
+      "prompt": "What is the median?",
+      "correct": 6,
+      "tolerance": 0.01,
+      "hints": ["Sort the values first.", "Sorted: 2, 4, 6, 8, 10 — take the middle one."],
+      "feedback": { "wrong": "Sort the list, then take the middle value." },
+      "solution": {
+        "body": "Sorted: 2, 4, 6, 8, 10. The middle (3rd of 5) value is **6**.",
+        "takeaway": "With an odd count, the median is the middle of the sorted data."
+      }
+    },
+    {
+      "id": "r1-3",
+      "type": "tap-choice",
+      "title": "Reading a z-score",
+      "context": "A measurement has **z = −2**.",
+      "prompt": "What does that tell you?",
+      "options": [
+        { "id": "below", "label": "2 standard deviations below the mean", "correct": true },
+        { "id": "above", "label": "2 standard deviations above the mean" },
+        { "id": "at", "label": "Exactly at the mean" }
+      ],
+      "hints": ["A z-score counts standard deviations from the mean.", "A negative z is below the mean."],
+      "feedback": { "wrong": "The sign tells you direction — negative means below the mean." },
+      "solution": {
+        "body": "**z = −2** means the value sits **2 standard deviations below** the mean.",
+        "takeaway": "z = (value − mean) ÷ SD; negative is below, positive is above."
+      }
+    }
   ]
 }

@@ -231,6 +231,14 @@ export async function resetLessonProgress(uid, lessonId) {
   });
 }
 
+export async function recordReviewShown(uid, dateKey) {
+  await setDoc(
+    userRef(uid),
+    { lastReviewDate: dateKey, updatedAt: serverTimestamp() },
+    { merge: true },
+  );
+}
+
 export function isLessonInProgress(progress) {
   if (!progress || progress.completed) return false;
   if (progress.currentStepIndex > 0) return true;

@@ -381,5 +381,56 @@
       "title": "Chapter 2 complete",
       "body": "You matched scatterplots to r, interpreted slopes, predicted safely inside the data, and squared r for explanatory power.\n\n*Next up:* probability — complements, overlap, independence, and trees."
     }
+  ],
+  "review": [
+    {
+      "id": "r2-1",
+      "type": "tap-choice",
+      "title": "Sign of correlation",
+      "context": "As outdoor temperature rises, hot-chocolate sales fall.",
+      "prompt": "What is the sign of r?",
+      "options": [
+        { "id": "neg", "label": "Negative", "correct": true },
+        { "id": "pos", "label": "Positive" },
+        { "id": "zero", "label": "About zero" }
+      ],
+      "hints": ["As one variable goes up, what does the other do?", "One rises while the other falls → downhill → negative."],
+      "feedback": { "wrong": "When one goes up and the other goes down, r is negative." },
+      "solution": {
+        "body": "As temperature rises, sales fall — a downhill trend, so **r is negative**.",
+        "takeaway": "Opposite directions mean a negative correlation."
+      }
+    },
+    {
+      "id": "r2-2",
+      "type": "number-input",
+      "title": "Predict from a line",
+      "context": "Regression line: **ŷ = 10 + 4x**.",
+      "prompt": "Predict y when x = 5.",
+      "correct": 30,
+      "tolerance": 0.01,
+      "hints": ["Substitute x = 5.", "10 + 4 × 5 = ?"],
+      "feedback": { "wrong": "Plug x = 5 into ŷ = 10 + 4x." },
+      "solution": {
+        "body": "ŷ = 10 + 4(5) = **30**.",
+        "takeaway": "Predict by substituting x into the regression equation."
+      }
+    },
+    {
+      "id": "r2-3",
+      "type": "number-input",
+      "title": "From r to r²",
+      "context": "The correlation is **r = 0.5**.",
+      "prompt": "What is r² (as a decimal)?",
+      "correct": 0.25,
+      "decimalPlaces": 2,
+      "tolerance": 0.001,
+      "hints": ["r² = r × r.", "0.5² = ?"],
+      "feedback": { "wrong": "Square r to get r²." },
+      "solution": {
+        "body": "r² = 0.5² = **0.25** — about 25% of the variation in y is explained.",
+        "takeaway": "r² is the square of r: the proportion of variation explained."
+      }
+    }
   ]
 }

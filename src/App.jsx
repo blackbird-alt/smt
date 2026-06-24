@@ -1,7 +1,13 @@
-import { lazy, Suspense, useCallback, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useAuth } from "./hooks/useAuth";
 import { useProgress } from "./hooks/useProgress";
 import { signOutUser } from "./lib/auth";
+import {
+  collectReviewProblems,
+  shouldShowDailyReview,
+  todayKey,
+} from "./lib/dailyReview";
+import { recordReviewShown } from "./lib/progress";
 import Login from "./components/Login";
 import CourseHome from "./components/CourseHome";
 
@@ -12,6 +18,7 @@ import CourseHome from "./components/CourseHome";
 const LessonPlayer = lazy(() => import("./components/LessonPlayer"));
 const Profile = lazy(() => import("./components/Profile"));
 const Leaderboard = lazy(() => import("./components/Leaderboard"));
+const DailyReview = lazy(() => import("./components/DailyReview"));
 
 function LoadingScreen() {
   return (
@@ -56,6 +63,39 @@ function AuthedApp({ user, refreshUser }) {
   const [reviewMode, setReviewMode] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [reviewProblems, setReviewProblems] = useState([]);
+  const reviewDecidedRef = useRef(false);
+
+  // Once per day, starting on the learner's second day, surface a review of
+  // problems drawn only from sections they've completed. Decided once after
+  // progress loads; the date is recorded immediately so it won't re-pop today.
+  useEffect(() => {
+    if (progressLoading || reviewDecidedRef.current || !profile) return undefined;
+
+    const completedIds = Object.keys(lessonProgress).filter(
+      (id) => lessonProgress[id]?.completed,
+    );
+    if (!shouldShowDailyReview(profile, completedIds)) {
+      reviewDecidedRef.current = true;
+      return undefined;
+    }
+    reviewDecidedRef.current = true;
+
+    let cancelled = false;
+    (async () => {
+      const problems = collectReviewProblems(completedIds);
+      if (problems.length === 0) return;
+      await recordReviewShown(user.uid, todayKey());
+      await refreshProfile();
+      if (cancelled) return;
+      setReviewProblems(problems);
+      setReviewOpen(true);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [progressLoading, profile, lessonProgress, user.uid, refreshProfile]);
 
   const activeProgress =
     localProgress ?? (activeLessonId ? lessonProgress[activeLessonId] : null);
@@ -105,6 +145,18 @@ function AuthedApp({ user, refreshUser }) {
 
   if (progressLoading) {
     return <LoadingScreen />;
+  }
+
+  if (reviewOpen) {
+    return (
+      <Suspense fallback={<LoadingScreen />}>
+        <DailyReview
+          problems={reviewProblems}
+          onAwardXp={grantXp}
+          onClose={() => setReviewOpen(false)}
+        />
+      </Suspense>
+    );
   }
 
   if (activeLessonId) {

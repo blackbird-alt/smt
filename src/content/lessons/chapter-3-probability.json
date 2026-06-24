@@ -400,5 +400,59 @@
       "title": "Chapter 3 complete",
       "body": "You used complements, overlap, conditional probability, trees, and counting methods to solve core probability problems.\n\nNext up: binomial distributions and how repeated yes/no trials create full probability models."
     }
+  ],
+  "review": [
+    {
+      "id": "r3-1",
+      "type": "tap-choice",
+      "title": "Complement rule",
+      "context": "An event has **P(A) = 0.3**.",
+      "prompt": "What is P(not A)?",
+      "options": [
+        { "id": "a", "label": "0.7", "correct": true },
+        { "id": "b", "label": "0.3" },
+        { "id": "c", "label": "1.3" }
+      ],
+      "hints": ["The complement rule: P(not A) = 1 − P(A).", "1 − 0.3 = ?"],
+      "feedback": { "wrong": "Use P(not A) = 1 − P(A)." },
+      "solution": {
+        "body": "P(not A) = 1 − 0.3 = **0.7**.",
+        "takeaway": "An event and its complement sum to 1."
+      }
+    },
+    {
+      "id": "r3-2",
+      "type": "number-input",
+      "title": "Two heads",
+      "context": "Flip two fair coins.",
+      "prompt": "What is P(both heads), as a decimal?",
+      "correct": 0.25,
+      "decimalPlaces": 2,
+      "tolerance": 0.001,
+      "hints": ["The flips are independent — multiply.", "(1/2)(1/2) = ?"],
+      "feedback": { "wrong": "Independent events multiply: P(H) × P(H)." },
+      "solution": {
+        "body": "P(HH) = (1/2)(1/2) = **0.25**.",
+        "takeaway": "For independent events, multiply the probabilities."
+      }
+    },
+    {
+      "id": "r3-3",
+      "type": "tap-choice",
+      "title": "Independent events",
+      "context": "A and B are independent with **P(A) = 0.5** and **P(B) = 0.2**.",
+      "prompt": "What is P(A and B)?",
+      "options": [
+        { "id": "a", "label": "0.1", "correct": true },
+        { "id": "b", "label": "0.7" },
+        { "id": "c", "label": "0.25" }
+      ],
+      "hints": ["Independent → multiply.", "0.5 × 0.2 = ?"],
+      "feedback": { "wrong": "Multiply the two probabilities for independent events." },
+      "solution": {
+        "body": "P(A and B) = 0.5 × 0.2 = **0.1**.",
+        "takeaway": "Independence means the joint probability is the product."
+      }
+    }
   ]
 }

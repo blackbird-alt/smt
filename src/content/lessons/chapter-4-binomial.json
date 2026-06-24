@@ -359,5 +359,55 @@
       "title": "Chapter 4 complete",
       "body": "You classified binomial experiments, computed coefficients and PMF values, and interpreted center, spread, and skew.\n\nNext up: normal curves, z-scores, areas, and sampling distributions."
     }
+  ],
+  "review": [
+    {
+      "id": "r4-1",
+      "type": "number-input",
+      "title": "Binomial mean",
+      "context": "A binomial setting with **n = 10** trials and **p = 0.3**.",
+      "prompt": "What is the mean number of successes (np)?",
+      "correct": 3,
+      "tolerance": 0.01,
+      "hints": ["The mean of a binomial is np.", "10 × 0.3 = ?"],
+      "feedback": { "wrong": "The binomial mean is n × p." },
+      "solution": {
+        "body": "Mean = np = 10 × 0.3 = **3**.",
+        "takeaway": "The expected number of successes is np."
+      }
+    },
+    {
+      "id": "r4-2",
+      "type": "number-input",
+      "title": "Binomial standard deviation",
+      "context": "A binomial setting with **n = 4** and **p = 0.5**.",
+      "prompt": "Compute the standard deviation √(np(1 − p)).",
+      "correct": 1,
+      "tolerance": 0.01,
+      "hints": ["SD = √(np(1 − p)).", "√(4 × 0.5 × 0.5) = √1."],
+      "feedback": { "wrong": "Use √(np(1 − p))." },
+      "solution": {
+        "body": "SD = √(4 × 0.5 × 0.5) = √1 = **1**.",
+        "takeaway": "Binomial spread is √(np(1 − p))."
+      }
+    },
+    {
+      "id": "r4-3",
+      "type": "tap-choice",
+      "title": "Is it binomial?",
+      "context": "Which situation is a binomial setting?",
+      "prompt": "Pick the binomial scenario.",
+      "options": [
+        { "id": "a", "label": "Counting heads in 20 independent coin flips", "correct": true },
+        { "id": "b", "label": "Measuring students' exact heights" },
+        { "id": "c", "label": "Timing how long until a bus arrives" }
+      ],
+      "hints": ["Binomial = a fixed number of independent yes/no trials with constant p.", "Which option counts successes over a fixed number of trials?"],
+      "feedback": { "wrong": "Look for fixed independent yes/no trials with the same probability." },
+      "solution": {
+        "body": "Counting heads in 20 coin flips is binomial: fixed n, independent trials, two outcomes, constant p.",
+        "takeaway": "Binomial needs fixed n, independence, two outcomes, and constant p."
+      }
+    }
   ]
 }
