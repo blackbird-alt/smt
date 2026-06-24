@@ -1,0 +1,244 @@
+{
+  "id": "chapter-7-hypothesis",
+  "title": "Chapter 7 — Hypothesis Testing",
+  "premium": true,
+  "steps": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "title": "Test claims with evidence",
+      "body": "Hypothesis testing asks whether sample data give enough evidence to reject a default claim. This chapter covers null and alternative hypotheses, test statistics, p-values, significance levels, and the two kinds of errors you can make."
+    },
+    {
+      "id": "7-1",
+      "type": "tap-choice",
+      "title": "State the null hypothesis",
+      "context": "A factory claims its bolts have a mean length of 50 mm. A quality inspector suspects the mean has drifted.",
+      "prompt": "What is the correct null hypothesis H0?",
+      "options": [
+        { "id": "a", "label": "mu = 50", "correct": true },
+        { "id": "b", "label": "mu ≠ 50" },
+        { "id": "c", "label": "x-bar = 50" }
+      ],
+      "hints": [
+        "The null hypothesis states the status quo or claimed value.",
+        "Hypotheses are statements about the population parameter mu, not the sample mean."
+      ],
+      "feedback": {
+        "wrong": "The null is the claimed equality about the population parameter."
+      },
+      "solution": {
+        "body": "H0: mu = 50. The null always expresses 'no change' or the claimed value, using the parameter mu.",
+        "takeaway": "Null hypotheses are statements of equality about a population parameter."
+      }
+    },
+    {
+      "id": "7-2",
+      "type": "tap-choice",
+      "title": "Choose the alternative",
+      "context": "The inspector only cares whether the mean has changed in either direction.",
+      "prompt": "Which alternative hypothesis Ha matches a two-sided test?",
+      "options": [
+        { "id": "a", "label": "mu > 50" },
+        { "id": "b", "label": "mu ≠ 50", "correct": true },
+        { "id": "c", "label": "mu < 50" }
+      ],
+      "hints": [
+        "Two-sided means you care about deviations in both directions.",
+        "The ≠ symbol captures 'different in either direction'."
+      ],
+      "feedback": {
+        "wrong": "A two-sided alternative uses the not-equal sign."
+      },
+      "solution": {
+        "body": "Ha: mu ≠ 50 is two-sided because a drift in either direction matters.",
+        "takeaway": "Match the alternative's direction to the research question."
+      }
+    },
+    {
+      "id": "7-3",
+      "type": "number-input",
+      "title": "Compute the z test statistic",
+      "context": "Sample of n = 64 bolts gives x-bar = 50.5. Assume sigma = 2.",
+      "prompt": "Compute the z statistic: (x-bar − mu0) / (sigma/sqrt(n)).",
+      "correct": 2,
+      "tolerance": 0.05,
+      "hints": [
+        "Standard error is sigma/sqrt(n) = 2/8 = 0.25.",
+        "z = (50.5 − 50) / 0.25."
+      ],
+      "feedback": {
+        "wrong": "Subtract the null value, then divide by the standard error."
+      },
+      "solution": {
+        "body": "z = (50.5 − 50) / (2/8) = 0.5 / 0.25 = 2.",
+        "takeaway": "A test statistic measures how many standard errors the estimate sits from the null value."
+      }
+    },
+    {
+      "id": "7-4",
+      "type": "tap-choice",
+      "title": "Interpret the p-value",
+      "context": "A test produces a two-sided p-value of 0.046 at significance level alpha = 0.05.",
+      "prompt": "What is the correct decision?",
+      "options": [
+        { "id": "a", "label": "Reject H0 because p < alpha", "correct": true },
+        { "id": "b", "label": "Accept H0 because p is small" },
+        { "id": "c", "label": "Fail to reject H0 because p < alpha" }
+      ],
+      "hints": [
+        "Compare the p-value to alpha.",
+        "If p < alpha, the evidence is strong enough to reject H0."
+      ],
+      "feedback": {
+        "wrong": "Reject H0 when the p-value is below the significance level."
+      },
+      "solution": {
+        "body": "Since 0.046 < 0.05, reject H0. We never 'accept' H0 — we only fail to reject it.",
+        "takeaway": "Decision rule: reject H0 when p-value < alpha."
+      }
+    },
+    {
+      "id": "7-5",
+      "type": "tap-choice",
+      "title": "Define a p-value",
+      "context": "Students often misread what a p-value represents.",
+      "prompt": "Which statement correctly describes a p-value?",
+      "options": [
+        { "id": "a", "label": "The probability that H0 is true" },
+        { "id": "b", "label": "The probability of data at least this extreme, assuming H0 is true", "correct": true },
+        { "id": "c", "label": "The probability of making a Type I error in this study" }
+      ],
+      "hints": [
+        "A p-value is computed assuming the null hypothesis holds.",
+        "It measures how surprising the observed data are under H0."
+      ],
+      "feedback": {
+        "wrong": "A p-value is a conditional probability of extreme data given H0."
+      },
+      "solution": {
+        "body": "A p-value is P(data at least this extreme | H0 true). It is not the probability that H0 is true.",
+        "takeaway": "P-values describe data given the null, not the probability the null is correct."
+      }
+    },
+    {
+      "id": "7-6",
+      "type": "tap-choice",
+      "title": "Type I vs Type II error",
+      "context": "Suppose the bolts are actually fine (H0 is true) but the test rejects H0.",
+      "prompt": "What kind of error is this?",
+      "options": [
+        { "id": "a", "label": "Type I error (false positive)", "correct": true },
+        { "id": "b", "label": "Type II error (false negative)" },
+        { "id": "c", "label": "No error occurred" }
+      ],
+      "hints": [
+        "Type I = rejecting a true null.",
+        "Type II = failing to reject a false null."
+      ],
+      "feedback": {
+        "wrong": "Rejecting a true null is a Type I error."
+      },
+      "solution": {
+        "body": "Rejecting a true H0 is a Type I error, whose probability equals alpha.",
+        "takeaway": "Type I = false alarm; Type II = missed detection."
+      }
+    },
+    {
+      "id": "7-7",
+      "type": "number-input",
+      "title": "Significance and Type I rate",
+      "context": "A researcher runs many tests at alpha = 0.01 when H0 is true every time.",
+      "prompt": "In the long run, what fraction of these tests will reject H0 (as a decimal)?",
+      "correct": 0.01,
+      "decimalPlaces": 2,
+      "tolerance": 0.001,
+      "hints": [
+        "Alpha is the long-run Type I error rate.",
+        "If H0 is always true, rejections happen at rate alpha."
+      ],
+      "feedback": {
+        "wrong": "The Type I error rate equals alpha."
+      },
+      "solution": {
+        "body": "About 0.01 (1%) of tests reject H0, because alpha is the Type I error rate.",
+        "takeaway": "Choosing alpha sets your tolerated false-positive rate."
+      }
+    },
+    {
+      "id": "7-8a",
+      "type": "tap-choice",
+      "title": "Capstone — set up the test",
+      "context": "A coffee chain claims mean service time is 180 seconds. A sample of n = 100 visits gives x-bar = 174 with known sigma = 30. Managers want to know if service is faster.",
+      "prompt": "What are the hypotheses for 'service is faster'?",
+      "options": [
+        { "id": "a", "label": "H0: mu = 180 vs Ha: mu < 180", "correct": true },
+        { "id": "b", "label": "H0: mu = 180 vs Ha: mu > 180" },
+        { "id": "c", "label": "H0: mu < 180 vs Ha: mu = 180" }
+      ],
+      "hints": [
+        "'Faster' means a smaller mean time.",
+        "The alternative carries the direction of the claim."
+      ],
+      "feedback": {
+        "wrong": "A one-sided 'faster' claim uses mu < 180 as the alternative."
+      },
+      "solution": {
+        "body": "H0: mu = 180 vs Ha: mu < 180, a left-tailed test.",
+        "takeaway": "Capstone step 1: translate the research claim into directional hypotheses."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "7-8b",
+      "type": "number-input",
+      "title": "Capstone — test statistic",
+      "context": "Use x-bar = 174, mu0 = 180, sigma = 30, n = 100.",
+      "prompt": "Compute the z statistic.",
+      "correct": -2,
+      "tolerance": 0.05,
+      "hints": [
+        "SE = 30/sqrt(100) = 3.",
+        "z = (174 − 180) / 3."
+      ],
+      "feedback": {
+        "wrong": "Use (x-bar − mu0)/SE; the result should be negative here."
+      },
+      "solution": {
+        "body": "z = (174 − 180) / (30/10) = −6/3 = −2.",
+        "takeaway": "Capstone step 2: standardize the estimate into a test statistic."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "7-8c",
+      "type": "tap-choice",
+      "title": "Capstone — conclusion",
+      "context": "The left-tailed p-value for z = −2 is about 0.023, with alpha = 0.05.",
+      "prompt": "What do you conclude?",
+      "options": [
+        { "id": "a", "label": "Reject H0: evidence that service is faster than 180s", "correct": true },
+        { "id": "b", "label": "Fail to reject H0: no evidence of any difference" },
+        { "id": "c", "label": "Accept H0: service time equals 180s exactly" }
+      ],
+      "hints": [
+        "Compare 0.023 to alpha = 0.05.",
+        "State the conclusion in the context of the claim."
+      ],
+      "feedback": {
+        "wrong": "Since p < alpha, reject H0 and report evidence of faster service."
+      },
+      "solution": {
+        "body": "Because 0.023 < 0.05, reject H0; there is significant evidence that mean service time is below 180 seconds.",
+        "takeaway": "Capstone flow: hypotheses, test statistic, p-value, then a context-rich decision."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "wrap-up",
+      "type": "intro",
+      "title": "Chapter 7 complete",
+      "body": "You can now frame null and alternative hypotheses, compute z test statistics, interpret p-values correctly, and weigh Type I against Type II errors.\n\nNext you'll extend these ideas to comparing two groups."
+    }
+  ]
+}

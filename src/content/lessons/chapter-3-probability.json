@@ -1,0 +1,404 @@
+{
+  "id": "chapter-3-probability",
+  "title": "Chapter 3 — Elementary Probability",
+  "steps": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "title": "From outcomes to chances",
+      "body": "Probability turns uncertainty into math: count outcomes, use complements, and update beliefs when conditions change. This chapter covers overlapping events, independence, conditional probability, probability trees, and counting methods.",
+      "definitions": [
+        { "term": "Complement", "definition": "The probability an event does NOT happen: P(not A) = 1 − P(A)." },
+        { "term": "Addition rule", "definition": "P(A or B) = P(A) + P(B) − P(A and B). Subtract the overlap so it isn't counted twice." },
+        { "term": "Independent events", "definition": "One event happening doesn't change the other's probability; then P(A and B) = P(A) × P(B)." },
+        { "term": "Conditional probability", "definition": "P(A | B) is the probability of A given B has happened — restrict to the B group, then divide." },
+        { "term": "Tree diagram", "definition": "A branching chart of sequential outcomes; multiply along branches, add across them." },
+        { "term": "Permutations vs combinations", "definition": "Permutations count arrangements where order matters; combinations count selections where it doesn't." }
+      ]
+    },
+    {
+      "id": "3-1",
+      "type": "outcome-select",
+      "title": "One outcome on a fair die",
+      "context": "A fair six-sided die is rolled once.",
+      "prompt": "Tap the die face for rolling a 5.",
+      "options": [
+        {
+          "id": "a",
+          "label": "1/6",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "label": "1/5"
+        },
+        {
+          "id": "c",
+          "label": "5/6"
+        }
+      ],
+      "hints": [
+        "For equally likely outcomes, probability is favorable outcomes divided by total outcomes.",
+        "There is exactly one favorable face (5) out of six faces."
+      ],
+      "feedback": {
+        "wrong": "Count favorable outcomes over total equally likely outcomes."
+      },
+      "solution": {
+        "body": "P(5) = 1/6 because exactly one die face is a 5 out of six equally likely faces.",
+        "takeaway": "Single-event probabilities on fair devices come from simple counting."
+      },
+      "singleSelect": true,
+      "faces": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "correctOutcomes": [
+        5
+      ]
+    },
+    {
+      "id": "3-1b",
+      "type": "tap-choice",
+      "title": "Use the complement",
+      "context": "Same die roll.",
+      "prompt": "What is P(not 5)?",
+      "options": [
+        {
+          "id": "a",
+          "label": "1/6"
+        },
+        {
+          "id": "b",
+          "label": "5/6",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "label": "4/6"
+        }
+      ],
+      "hints": [
+        "The complement rule says P(not A) = 1 - P(A).",
+        "From 3.1, P(5) = 1/6, so subtract from 1."
+      ],
+      "feedback": {
+        "wrong": "Use the complement: 1 - P(5)."
+      },
+      "solution": {
+        "body": "P(not 5) = 1 - 1/6 = 5/6.",
+        "takeaway": "Complements are the fastest way to handle \"not\" events."
+      }
+    },
+    {
+      "id": "3-2",
+      "type": "contingency-table",
+      "title": "Addition with overlap",
+      "context": "Draw one card from a standard 52-card deck.",
+      "prompt": "Tap the cell with cards that are **both** heart and face (the overlap).",
+      "hints": [
+        "The overlap is the cell that is **both** a heart **and** a face card.",
+        "Heart face cards are J, Q, K of hearts → that's the cell showing **3**."
+      ],
+      "feedback": {
+        "wrong": "Tap the overlap cell: heart and face."
+      },
+      "solution": {
+        "body": "The overlap is **3** (J, Q, K of hearts). By the addition rule, P(heart ∪ face) = (13 + 12 − 3)/52 = 22/52 = **11/26**.",
+        "takeaway": "Avoid double-counting by subtracting the overlap in OR problems, then write the probability over the full sample space (52)."
+      },
+      "fraction": {
+        "prompt": "Now use the addition rule. What is P(heart **or** face) for one draw from the 52-card deck? Enter it as a fraction.",
+        "numerator": 22,
+        "denominator": 52,
+        "hints": [
+          "P(A or B) = P(A) + P(B) − P(A and B). Add hearts (13) and face cards (12), then subtract the overlap (3) you just tapped.",
+          "13 + 12 − 3 = 22 favorable cards out of 52 → 22/52 (which reduces to 11/26)."
+        ],
+        "feedback": {
+          "wrong": "Add 13 + 12, subtract the overlap 3, all over 52: (13 + 12 − 3)/52."
+        }
+      },
+      "rowLabels": [
+        "Heart",
+        "Not heart"
+      ],
+      "colLabels": [
+        "Face card",
+        "Not face"
+      ],
+      "cells": [
+        {
+          "id": "0-0",
+          "count": 3,
+          "correct": true
+        },
+        {
+          "id": "0-1",
+          "count": 10
+        },
+        {
+          "id": "1-0",
+          "count": 9
+        },
+        {
+          "id": "1-1",
+          "count": 30
+        }
+      ]
+    },
+    {
+      "id": "3-3",
+      "type": "coin-flip-explore",
+      "title": "Two independent flips",
+      "prompt": "Flip two fair coins, then choose P(HH).",
+      "options": [
+        {
+          "id": "a",
+          "label": "1/4",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "label": "1/2"
+        },
+        {
+          "id": "c",
+          "label": "1/3"
+        }
+      ],
+      "hints": [
+        "For independent events, multiply probabilities.",
+        "P(H on first) = 1/2 and P(H on second) = 1/2."
+      ],
+      "feedback": {
+        "wrong": "Multiply the two head probabilities."
+      },
+      "solution": {
+        "body": "P(HH) = (1/2)(1/2) = 1/4.",
+        "takeaway": "Independence means multiplication of probabilities."
+      },
+      "trackId": "hh",
+      "trackLabel": "H then H",
+      "minFlips": 8
+    },
+    {
+      "id": "featured-bag",
+      "type": "bag-simulator",
+      "title": "Bag draw simulator",
+      "prompt": "A bag has 5 red and 3 blue marbles. Draw ten pairs of marbles and ask: what is P(both red)? Start **without replacement**, run batches, then compare empirical rates to the theoretical value.",
+      "red": 5,
+      "blue": 3,
+      "withReplacement": false,
+      "feedback": {
+        "ready": "Without replacement the two draws are **dependent**, so use the multiplication rule with a *conditional* second factor: P(both red) = P(1st red) × P(2nd red | 1st red) = (5/8) × (4/7) = 20/56 = **5/14 ≈ 35.7%**. Drawing a red first leaves only 4 reds among 7 marbles — that shrinking denominator (8 → 7) is exactly what makes the second draw depend on the first. Now switch to **with replacement**: the marble goes back, the draws become *independent*, and the second factor stays 5/8, giving P = (5/8)² = 25/64 ≈ 39.1%. It's higher because the first red is never used up, so the bag stays \"red-rich\" for the second draw. In both cases, the more pairs you draw the closer your empirical hit rate creeps to the theoretical value — that's the law of large numbers in action."
+      }
+    },
+    {
+      "id": "3-4",
+      "type": "tap-choice",
+      "title": "Without replacement",
+      "context": "A bag has 5 red and 3 blue marbles. Draw 2 without replacement.",
+      "prompt": "What is P(both red)?",
+      "options": [
+        {
+          "id": "a",
+          "label": "5/14",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "label": "25/64"
+        },
+        {
+          "id": "c",
+          "label": "10/16"
+        }
+      ],
+      "hints": [
+        "Without replacement, the second probability changes after the first draw.",
+        "Compute (5/8)(4/7) and simplify."
+      ],
+      "feedback": {
+        "wrong": "Use changing denominators for no-replacement draws."
+      },
+      "solution": {
+        "body": "P(both red) = (5/8)(4/7) = 20/56 = 5/14.",
+        "takeaway": "No replacement creates dependence across draws."
+      }
+    },
+    {
+      "id": "3-5",
+      "type": "contingency-table",
+      "title": "Conditional probability from a table",
+      "context": "Student survey:\nPlays sports & has part-time job = 24\nDoes not play sports & has part-time job = 12\nPlays sports & no job = 12\nDoes not play sports & no job = 52",
+      "prompt": "Given a student has a part-time job, tap the cell with students who play sports.",
+      "hints": [
+        "\"Given a job\" means restrict to the **Has job** column — ignore the no-job students entirely.",
+        "Within the Has-job column, tap the *plays sports* row (the **24**)."
+      ],
+      "feedback": {
+        "wrong": "Condition first: stay inside the Has-job column, then find plays-sports."
+      },
+      "solution": {
+        "body": "Restrict to the **Has job** column: 24 + 12 = 36 students. Of those, 24 play sports, so P(plays sports | has job) = 24/36 = **2/3**.",
+        "takeaway": "Conditioning changes the sample space to the given subgroup, then you divide within it."
+      },
+      "fraction": {
+        "prompt": "Now compute the conditional probability. Out of everyone with a part-time job, what is P(plays sports)? Enter it as a fraction.",
+        "numerator": 24,
+        "denominator": 36,
+        "hints": [
+          "Conditioning shrinks the sample space to just the Has-job column: 24 + 12 = **36** students.",
+          "Of those 36, 24 play sports → 24/36, which reduces to **2/3**."
+        ],
+        "feedback": {
+          "wrong": "Use only the Has-job column: (plays sports) ÷ (all job-holders) = 24/36."
+        }
+      },
+      "rowLabels": [
+        "Plays sports",
+        "Does not play sports"
+      ],
+      "colLabels": [
+        "Has job",
+        "No job"
+      ],
+      "cells": [
+        {
+          "id": "0-0",
+          "count": 24,
+          "correct": true
+        },
+        {
+          "id": "0-1",
+          "count": 12
+        },
+        {
+          "id": "1-0",
+          "count": 12
+        },
+        {
+          "id": "1-1",
+          "count": 52
+        }
+      ]
+    },
+    {
+      "id": "3-6",
+      "type": "prob-tree",
+      "title": "Total probability on a tree",
+      "context": "Machine A makes 60% of parts with 2% defective. Machine B makes 40% with 5% defective.",
+      "prompt": "Use the tree. What is the overall probability a random part is defective?",
+      "tree": {
+        "rootLabel": "Part",
+        "branches": [
+          {
+            "id": "A",
+            "label": "Machine A",
+            "p": "0.60",
+            "leaves": [
+              { "label": "Defective", "p": "0.02", "joint": "0.012", "highlight": true },
+              { "label": "OK", "p": "0.98" }
+            ]
+          },
+          {
+            "id": "B",
+            "label": "Machine B",
+            "p": "0.40",
+            "leaves": [
+              { "label": "Defective", "p": "0.05", "joint": "0.020", "highlight": true },
+              { "label": "OK", "p": "0.95" }
+            ]
+          }
+        ]
+      },
+      "options": [
+        { "id": "a", "label": "0.032", "correct": true },
+        { "id": "b", "label": "0.07" },
+        { "id": "c", "label": "0.028" },
+        { "id": "d", "label": "0.05" }
+      ],
+      "hints": [
+        "Add defect paths from each branch: P(A and D) + P(B and D).",
+        "Compute (0.60)(0.02) + (0.40)(0.05)."
+      ],
+      "feedback": {
+        "wrong": "Weight each defect rate by that machine's production share."
+      },
+      "solution": {
+        "body": "P(defective) = 0.60(0.02) + 0.40(0.05) = 0.012 + 0.020 = 0.032.",
+        "takeaway": "Total probability is a weighted average across branches."
+      }
+    },
+    {
+      "id": "3-7",
+      "type": "tap-choice",
+      "title": "Permutations vs combinations",
+      "context": "Ten students run for three distinct offices: president, vice president, secretary.",
+      "prompt": "Which count applies?",
+      "options": [
+        {
+          "id": "a",
+          "label": "120 (combination)",
+          "correct": false
+        },
+        {
+          "id": "b",
+          "label": "720 (permutation)",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "label": "1000"
+        }
+      ],
+      "hints": [
+        "If roles are different, order matters.",
+        "You need 10P3 = 10 x 9 x 8."
+      ],
+      "feedback": {
+        "wrong": "Not quite. Ask yourself: if two candidates swapped which office they hold, would that be a different outcome or the same one?"
+      },
+      "solution": {
+        "body": "Use permutations: 10P3 = 10 x 9 x 8 = 720.",
+        "takeaway": "Combinations ignore order; permutations assign roles."
+      }
+    },
+    {
+      "id": "3-8",
+      "type": "tap-choice",
+      "title": "At least one defective",
+      "context": "Each circuit board is defective with probability 0.035. A sample has 20 independent boards.",
+      "prompt": "Approximate P(at least one defective).",
+      "options": [
+        { "id": "a", "label": "0.51", "correct": true },
+        { "id": "b", "label": "0.70" },
+        { "id": "c", "label": "0.49" },
+        { "id": "d", "label": "0.04" }
+      ],
+      "hints": [
+        "Use the complement: P(at least one) = 1 - P(none).",
+        "P(none defective) = (1 - 0.035)^20 = 0.965^20 ≈ 0.490."
+      ],
+      "feedback": {
+        "wrong": "Compute 1 - 0.965^20."
+      },
+      "solution": {
+        "body": "P(at least one) = 1 - 0.965^20 ≈ 1 - 0.490 = 0.51.",
+        "takeaway": "For \"at least one,\" the complement is usually the cleanest path."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "wrap-up",
+      "type": "intro",
+      "title": "Chapter 3 complete",
+      "body": "You used complements, overlap, conditional probability, trees, and counting methods to solve core probability problems.\n\nNext up: binomial distributions and how repeated yes/no trials create full probability models."
+    }
+  ]
+}

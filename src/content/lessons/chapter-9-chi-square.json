@@ -1,0 +1,235 @@
+{
+  "id": "chapter-9-chi-square",
+  "title": "Chapter 9 — Chi-Square Tests",
+  "premium": true,
+  "steps": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "title": "Inference for categories",
+      "body": "When data are counts in categories, chi-square tests compare what you observed to what you'd expect. This chapter covers goodness-of-fit, tests of independence, expected counts, degrees of freedom, and interpreting the chi-square statistic."
+    },
+    {
+      "id": "9-1",
+      "type": "tap-choice",
+      "title": "Which chi-square test?",
+      "context": "A survey cross-tabulates favorite genre (3 levels) against age group (4 levels) to see if they are related.",
+      "prompt": "Which test is appropriate?",
+      "options": [
+        { "id": "a", "label": "Chi-square test of independence", "correct": true },
+        { "id": "b", "label": "Chi-square goodness-of-fit test" },
+        { "id": "c", "label": "Two-sample t-test" }
+      ],
+      "hints": [
+        "Are you comparing one variable to a fixed distribution, or two variables to each other?",
+        "Two categorical variables in a table suggests independence."
+      ],
+      "feedback": {
+        "wrong": "Two categorical variables in a contingency table calls for a test of independence."
+      },
+      "solution": {
+        "body": "Two categorical variables in a table use the chi-square test of independence.",
+        "takeaway": "Goodness-of-fit checks one variable; independence checks two."
+      }
+    },
+    {
+      "id": "9-2",
+      "type": "number-input",
+      "title": "Expected count (goodness-of-fit)",
+      "context": "A die is rolled 120 times. Under a fair-die null, each face is equally likely.",
+      "prompt": "What is the expected count for any single face?",
+      "correct": 20,
+      "tolerance": 0.5,
+      "hints": [
+        "A fair die has probability 1/6 per face.",
+        "Expected count = n x probability = 120 x (1/6)."
+      ],
+      "feedback": {
+        "wrong": "Multiply the total by each category's null probability."
+      },
+      "solution": {
+        "body": "Expected = 120 x (1/6) = 20 per face.",
+        "takeaway": "Expected counts come from total sample size times null probabilities."
+      }
+    },
+    {
+      "id": "9-3",
+      "type": "number-input",
+      "title": "Expected count (independence)",
+      "context": "In a contingency table the row total is 60, the column total is 50, and the grand total is 200.",
+      "prompt": "Compute the expected cell count: (row total x column total) / grand total.",
+      "correct": 15,
+      "tolerance": 0.1,
+      "hints": [
+        "Expected = (row total x column total) / grand total.",
+        "(60 x 50) / 200 = 3000 / 200."
+      ],
+      "feedback": {
+        "wrong": "Use (row total x column total)/grand total for each cell."
+      },
+      "solution": {
+        "body": "Expected = (60 x 50) / 200 = 15.",
+        "takeaway": "Independence expected counts assume row and column proportions are unrelated."
+      }
+    },
+    {
+      "id": "9-4",
+      "type": "number-input",
+      "title": "One cell's contribution",
+      "context": "A cell has observed count O = 25 and expected count E = 20.",
+      "prompt": "Compute this cell's chi-square contribution: (O − E)^2 / E.",
+      "correct": 1.25,
+      "decimalPlaces": 2,
+      "tolerance": 0.01,
+      "hints": [
+        "Each term is (O − E)^2 / E.",
+        "(25 − 20)^2 / 20 = 25/20."
+      ],
+      "feedback": {
+        "wrong": "Square the difference, then divide by the expected count."
+      },
+      "solution": {
+        "body": "(25 − 20)^2 / 20 = 25 / 20 = 1.25.",
+        "takeaway": "The chi-square statistic sums (O − E)^2/E over all cells."
+      }
+    },
+    {
+      "id": "9-5",
+      "type": "number-input",
+      "title": "Degrees of freedom (table)",
+      "context": "A contingency table has 3 rows and 4 columns.",
+      "prompt": "Compute the degrees of freedom: (rows − 1)(columns − 1).",
+      "correct": 6,
+      "tolerance": 0.5,
+      "hints": [
+        "df = (r − 1)(c − 1).",
+        "(3 − 1)(4 − 1) = 2 x 3."
+      ],
+      "feedback": {
+        "wrong": "Multiply (rows − 1) by (columns − 1)."
+      },
+      "solution": {
+        "body": "df = (3 − 1)(4 − 1) = 2 x 3 = 6.",
+        "takeaway": "Independence df depends on the table's shape, not the sample size."
+      }
+    },
+    {
+      "id": "9-6",
+      "type": "tap-choice",
+      "title": "Interpreting chi-square",
+      "context": "A goodness-of-fit test gives chi-square = 14.1 with df = 5; the 0.05 critical value is about 11.07.",
+      "prompt": "What is the decision?",
+      "options": [
+        { "id": "a", "label": "Reject H0: observed counts differ from expected", "correct": true },
+        { "id": "b", "label": "Fail to reject H0: data fit the model" },
+        { "id": "c", "label": "Accept H0: the model is exactly correct" }
+      ],
+      "hints": [
+        "Reject when the statistic exceeds the critical value.",
+        "14.1 vs 11.07."
+      ],
+      "feedback": {
+        "wrong": "A statistic above the critical value leads to rejecting H0."
+      },
+      "solution": {
+        "body": "Since 14.1 > 11.07, reject H0: the observed distribution differs from the expected one.",
+        "takeaway": "Large chi-square values mean observed and expected counts diverge."
+      }
+    },
+    {
+      "id": "9-7",
+      "type": "tap-choice",
+      "title": "Direction of chi-square",
+      "context": "Someone asks whether chi-square tests can be one- or two-sided.",
+      "prompt": "Which statement is true about the chi-square test?",
+      "options": [
+        { "id": "a", "label": "It is inherently right-tailed: only large values give evidence against H0", "correct": true },
+        { "id": "b", "label": "It is two-sided like a z-test" },
+        { "id": "c", "label": "Small chi-square values reject H0" }
+      ],
+      "hints": [
+        "Chi-square sums squared deviations, so it is never negative.",
+        "Evidence against H0 shows up as a large statistic."
+      ],
+      "feedback": {
+        "wrong": "Only large chi-square values count as evidence against H0."
+      },
+      "solution": {
+        "body": "Because it sums squared deviations, chi-square is right-tailed; only large values reject H0.",
+        "takeaway": "Chi-square evidence is always in the upper tail."
+      }
+    },
+    {
+      "id": "9-8a",
+      "type": "number-input",
+      "title": "Capstone — expected counts",
+      "context": "A goodness-of-fit test checks if 4 product colors sell equally. Total sales n = 400.",
+      "prompt": "Under equal preference, what is the expected count per color?",
+      "correct": 100,
+      "tolerance": 0.5,
+      "hints": [
+        "Equal preference means probability 1/4 per color.",
+        "400 x (1/4) = ?"
+      ],
+      "feedback": {
+        "wrong": "Multiply 400 by 1/4."
+      },
+      "solution": {
+        "body": "Expected = 400 x (1/4) = 100 per color.",
+        "takeaway": "Capstone step 1: build expected counts from the null model."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "9-8b",
+      "type": "number-input",
+      "title": "Capstone — degrees of freedom",
+      "context": "There are 4 color categories in this goodness-of-fit test.",
+      "prompt": "Compute df = number of categories − 1.",
+      "correct": 3,
+      "tolerance": 0.5,
+      "hints": [
+        "Goodness-of-fit df = k − 1.",
+        "4 − 1 = ?"
+      ],
+      "feedback": {
+        "wrong": "For goodness-of-fit, df is the number of categories minus one."
+      },
+      "solution": {
+        "body": "df = 4 − 1 = 3.",
+        "takeaway": "Capstone step 2: goodness-of-fit df = categories − 1."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "9-8c",
+      "type": "tap-choice",
+      "title": "Capstone — conclusion",
+      "context": "The test gives chi-square = 9.5 with df = 3; the 0.05 critical value is about 7.81.",
+      "prompt": "What do you conclude about equal color preference?",
+      "options": [
+        { "id": "a", "label": "Reject H0: colors are not sold in equal proportions", "correct": true },
+        { "id": "b", "label": "Fail to reject H0: colors sell equally" },
+        { "id": "c", "label": "Accept H0: preferences are exactly equal" }
+      ],
+      "hints": [
+        "Compare 9.5 to the critical value 7.81.",
+        "State the conclusion about color preference."
+      ],
+      "feedback": {
+        "wrong": "Since 9.5 > 7.81, reject H0 and report unequal preference."
+      },
+      "solution": {
+        "body": "Because 9.5 > 7.81, reject H0: there is evidence the colors do not sell in equal proportions.",
+        "takeaway": "Capstone flow: expected counts, df, statistic, then a categorical conclusion."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "wrap-up",
+      "type": "intro",
+      "title": "Chapter 9 complete",
+      "body": "You can now choose between goodness-of-fit and independence tests, compute expected counts and degrees of freedom, and read the right-tailed chi-square statistic.\n\nNext you'll bring inference to the regression line."
+    }
+  ]
+}

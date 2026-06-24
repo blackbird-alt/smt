@@ -1,0 +1,385 @@
+{
+  "id": "chapter-2-correlation",
+  "title": "Chapter 2 — Correlation and Regression",
+  "steps": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "title": "Patterns in pairs",
+      "body": "When two variables are measured together, scatterplots reveal direction and strength of association. You'll interpret correlation, fit regression lines, make predictions, and recognize when correlation does not imply causation.",
+      "definitions": [
+        { "term": "Scatterplot", "definition": "A graph of paired (x, y) points used to see the direction and strength of a relationship." },
+        { "term": "Correlation (r)", "definition": "A number from −1 to +1 measuring the direction and strength of a *linear* relationship." },
+        { "term": "Regression line", "definition": "The best-fit line ŷ = a + bx used to predict y from x." },
+        { "term": "Slope", "definition": "The predicted change in y for each one-unit increase in x." },
+        { "term": "Interpolation vs extrapolation", "definition": "Predicting inside the observed range (safe) vs outside it (unreliable)." },
+        { "term": "r²", "definition": "The fraction of the variation in y explained by the model — the square of r." },
+        { "term": "Correlation ≠ causation", "definition": "A strong r shows association, not that one variable causes the other; watch for lurking variables." }
+      ]
+    },
+    {
+      "id": "2-1",
+      "type": "scatter-match",
+      "title": "Match scatterplots to r",
+      "prompt": "Assign each correlation coefficient to the plot it matches.",
+      "plots": [
+        {
+          "id": "a",
+          "label": "A",
+          "preset": "tight-negative",
+          "correctR": "-0.95"
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "preset": "loose-negative",
+          "correctR": "-0.4"
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "preset": "none",
+          "correctR": "0"
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "preset": "tight-positive",
+          "correctR": "0.8"
+        }
+      ],
+      "rOptions": [
+        "-0.95",
+        "-0.4",
+        "0",
+        "0.8"
+      ],
+      "hints": [
+        "Sign of r matches direction (uphill = positive, downhill = negative). Magnitude matches how tightly points hug a line.",
+        "The shapeless blob is near 0. The tightest band gets the most extreme |r| — compare A's tightness to D's."
+      ],
+      "feedback": {
+        "wrong": "Read sign from slope direction and strength from scatter."
+      },
+      "solution": {
+        "body": "**A = −0.95, B = −0.4, C = 0.0, D = 0.8.** Tight downhill → −0.95; loose downhill → −0.4; no trend → 0; tight uphill → 0.8.",
+        "takeaway": "Read sign from direction and strength from scatter; r near ±1 means tight linear packing, r near 0 means no linear trend."
+      }
+    },
+    {
+      "id": "2-2",
+      "type": "tap-choice",
+      "title": "Predict the sign of r",
+      "context": "For each pair, would you expect r to be positive, negative, or near zero?",
+      "prompt": "Which pair expects a **negative** correlation?",
+      "options": [
+        {
+          "id": "weight-mpg",
+          "label": "Car weight & fuel economy (mpg)",
+          "correct": true
+        },
+        {
+          "id": "study-score",
+          "label": "Hours studied & exam score"
+        },
+        {
+          "id": "shoe-score",
+          "label": "Shoe size & exam score"
+        }
+      ],
+      "hints": [
+        "Ask: as one variable rises, does the other tend to rise (positive), fall (negative), or not move together (near zero)?",
+        "Heavier cars generally get fewer mpg. Shoe size and exam score have no mechanism linking them."
+      ],
+      "feedback": {
+        "wrong": "Negative r means y tends to fall as x rises."
+      },
+      "solution": {
+        "body": "**(a) negative** — heavier → fewer mpg. **(b) positive** — more study → higher scores. **(c) near zero** — no meaningful link.",
+        "takeaway": "The sign of r encodes direction of association; near zero is what you expect when variables are genuinely unrelated."
+      }
+    },
+    {
+      "id": "2-3",
+      "type": "tap-choice",
+      "title": "Correlation is not causation",
+      "context": "A town finds **r = 0.86** between monthly ice-cream sales and drowning deaths. A columnist says ice cream causes drownings.",
+      "prompt": "What's the main flaw in that conclusion?",
+      "options": [
+        {
+          "id": "causation",
+          "label": "Correlation doesn't prove causation — a third variable may drive both",
+          "correct": true
+        },
+        {
+          "id": "weak",
+          "label": "r = 0.86 is too weak to conclude anything"
+        },
+        {
+          "id": "reverse",
+          "label": "Drownings cause people to buy ice cream"
+        }
+      ],
+      "hints": [
+        "High r means two things move together — it says nothing about one causing the other.",
+        "What changes across summer months that would push both ice-cream sales and swimming (hence drownings) up together?"
+      ],
+      "feedback": {
+        "wrong": "Association ≠ cause. Look for a confounding variable."
+      },
+      "solution": {
+        "body": "The flaw is inferring **causation from correlation**. **Hot summer weather** independently raises ice-cream sales and swimming activity (hence drownings). Neither causes the other.",
+        "takeaway": "Correlation establishes association, not cause — always ask whether a confounding variable could produce the link."
+      }
+    },
+    {
+      "id": "featured-sandbox",
+      "type": "correlation-sandbox",
+      "title": "Live correlation sandbox",
+      "prompt": "Drag points on the scatterplot and watch **r**, **r²**, and the regression line update live. Click the plot to place your own outlier — see how much one point can move the line.",
+      "preset": "sandbox",
+      "feedback": {
+        "ready": "Sign from direction, strength from tightness — and one outlier can hijack the whole line."
+      }
+    },
+    {
+      "id": "2-4-figure",
+      "type": "scatter-display",
+      "title": "Repair cost vs car age",
+      "context": "Annual repair cost ($) plotted against car age (years), with the least-squares line **ŷ = 200 + 45x**.",
+      "prompt": "Study the regression line, then interpret its slope and intercept on the next page.",
+      "preset": "repair",
+      "xLabel": "Car age (years)",
+      "yLabel": "Annual repair cost ($)",
+      "feedback": {
+        "ready": "The line climbs about $45 for each additional year — that steady rise is the slope."
+      }
+    },
+    {
+      "id": "2-4",
+      "type": "tap-choice",
+      "title": "Interpret slope and intercept",
+      "context": "Regression of annual repair cost ($) on car age (years):\n**ŷ = 200 + 45x**",
+      "prompt": "What does the **slope (45)** mean in plain language?",
+      "options": [
+        {
+          "id": "slope",
+          "label": "Each extra year adds $45 to predicted annual repair cost",
+          "correct": true
+        },
+        {
+          "id": "intercept",
+          "label": "A brand-new car costs $45/year to repair"
+        },
+        {
+          "id": "total",
+          "label": "Total cost after 45 years is $200"
+        }
+      ],
+      "hints": [
+        "In ŷ = a + bx, the slope b is the change in predicted y for each one-unit increase in x. Keep the units attached.",
+        "The intercept 200 is predicted cost at age 0 — the slope is the per-year change."
+      ],
+      "feedback": {
+        "wrong": "Slope = per-unit change in y; intercept = predicted y when x = 0."
+      },
+      "solution": {
+        "body": "**Slope = $45/year** — each additional year adds $45 to predicted annual repair cost. **Intercept = $200** — predicted cost for a 0-year-old car (only meaningful if x = 0 is near the data).",
+        "takeaway": "Slope = per-unit change in y; intercept = predicted y at x = 0 — always state units and treat the intercept cautiously."
+      }
+    },
+    {
+      "id": "2-5",
+      "type": "tap-choice",
+      "title": "Prediction within range",
+      "context": "Using **ŷ = 200 + 45x** (data covered ages **1–12 years**).",
+      "prompt": "Predict the annual repair cost for a **6-year-old** car using **ŷ = 200 + 45x** (so x = 6).",
+      "options": [
+        { "id": "a", "label": "$470", "correct": true },
+        { "id": "b", "label": "$270" },
+        { "id": "c", "label": "$245" },
+        { "id": "d", "label": "$200" }
+      ],
+      "hints": [
+        "Substitute x = 6 into the equation.",
+        "200 + 45(6). Since 6 is inside 1–12, this is safe interpolation."
+      ],
+      "feedback": {
+        "wrong": "Use ŷ = 200 + 45(6)."
+      },
+      "solution": {
+        "body": "**ŷ = 200 + 45(6) = $470/year.** Because 6 years is within the data range, this is **interpolation** and is trustworthy.",
+        "takeaway": "Substituting an x inside the observed range is interpolation and generally safe."
+      }
+    },
+    {
+      "id": "2-6",
+      "type": "tap-choice",
+      "title": "The danger of extrapolation",
+      "context": "Same model **ŷ = 200 + 45x** (data ages 1–12). A manager predicts cost for a **25-year-old** car: **$1,325**.",
+      "prompt": "Why distrust the $1,325 prediction?",
+      "options": [
+        {
+          "id": "extrap",
+          "label": "25 years is far outside the data — the linear pattern isn't validated there",
+          "correct": true
+        },
+        {
+          "id": "math",
+          "label": "They plugged the formula in wrong"
+        },
+        {
+          "id": "fine",
+          "label": "Linear models work forever — $2,000 is fine"
+        }
+      ],
+      "hints": [
+        "25 years is far outside the 1–12 range the line was fit on.",
+        "Real costs may curve, jump, or level off — the model was never tested that far out."
+      ],
+      "feedback": {
+        "wrong": "Extrapolation means predicting where you have no evidence."
+      },
+      "solution": {
+        "body": "**Extrapolation** — 25 years is far beyond the observed 1–12 range. The linear pattern may break entirely (cars scrapped, major overhauls, etc.).",
+        "takeaway": "Never trust predictions far outside the range of the data — the model carries no evidence about behavior it never saw."
+      }
+    },
+    {
+      "id": "2-7",
+      "type": "tap-choice",
+      "title": "Interpret r²",
+      "context": "Regression of exam score on hours studied: **r = 0.7**.",
+      "prompt": "What is r² (the coefficient of determination)?",
+      "options": [
+        { "id": "a", "label": "0.49", "correct": true },
+        { "id": "b", "label": "0.70" },
+        { "id": "c", "label": "0.84" },
+        { "id": "d", "label": "0.35" }
+      ],
+      "hints": [
+        "r² is literally r squared — the coefficient of determination.",
+        "0.7² = ? Convert to the proportion of variation in y explained by x."
+      ],
+      "feedback": {
+        "wrong": "Square r: 0.7 × 0.7."
+      },
+      "solution": {
+        "body": "**r² = 0.49 (49%).** About 49% of score variation is explained by hours studied; the other 51% is sleep, prior knowledge, test difficulty, and chance.",
+        "takeaway": "r² measures explanatory power — a respectable r = 0.7 still explains under half the variation."
+      }
+    },
+    {
+      "id": "2-8-figure",
+      "type": "scatter-display",
+      "title": "Tutoring center scatterplot",
+      "context": "Six students at a tutoring center:\n**Hours:** 10, 12, 14, 16, 18, 20\n**Scores:** 70, 72, 78, 80, 85, 88",
+      "prompt": "Study the scatterplot and regression line before answering the capstone questions.",
+      "preset": "tutoring",
+      "xLabel": "Hours studied",
+      "yLabel": "Exam score",
+      "feedback": {
+        "ready": "Points rise in a tight band — strong positive association with r near +0.99."
+      }
+    },
+    {
+      "id": "2-8a",
+      "type": "tap-choice",
+      "title": "Association strength",
+      "context": "Tutoring center data (6 students):\n**Hours:** 10, 12, 14, 16, 18, 20\n**Scores:** 70, 72, 78, 80, 85, 88",
+      "prompt": "Is the association **positive or negative**, and roughly how strong?",
+      "options": [
+        {
+          "id": "strong-pos",
+          "label": "Strong positive — y rises steadily with x",
+          "correct": true
+        },
+        {
+          "id": "weak-pos",
+          "label": "Weak positive"
+        },
+        {
+          "id": "negative",
+          "label": "Negative"
+        }
+      ],
+      "hints": [
+        "Picture the points — do they rise or fall, and how tightly?",
+        "Scores climb with practice hours in an almost straight band."
+      ],
+      "feedback": {
+        "wrong": "Points rise steadily and nearly linearly."
+      },
+      "solution": {
+        "body": "**Strong positive** association — r ≈ +0.99. y rises steadily with x in a tight band.",
+        "takeaway": "Name direction and strength before computing — the scatterplot tells you both."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "2-8b",
+      "type": "tap-choice",
+      "title": "Predict within range",
+      "context": "Least-squares line: **ŷ = 51.5 + 1.83x** (hours 10–20).",
+      "prompt": "Predict the exam score for **15 hours** of tutoring (points).",
+      "options": [
+        { "id": "a", "label": "79 points", "correct": true },
+        { "id": "b", "label": "52 points" },
+        { "id": "c", "label": "27 points" },
+        { "id": "d", "label": "70 points" }
+      ],
+      "hints": [
+        "Substitute x = 15. Is 15 inside the observed range?",
+        "51.5 + 1.83(15) ≈ ?"
+      ],
+      "feedback": {
+        "wrong": "Compute 51.5 + 1.83 × 15."
+      },
+      "solution": {
+        "body": "**ŷ ≈ 79 points** (51.5 + 1.83×15 ≈ 78.95). x = 15 is inside 10–20 → reliable interpolation.",
+        "takeaway": "Predict only inside the data range unless you're explicitly discussing extrapolation risk."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "2-8c",
+      "type": "tap-choice",
+      "title": "Why not 60 hours?",
+      "context": "Same line **ŷ = 51.5 + 1.83x**; observed hours were **10–20**.",
+      "prompt": "Give one reason **not** to use this line to predict score after **60 hours**.",
+      "options": [
+        {
+          "id": "extrap",
+          "label": "60 hours is far outside the data — extrapolation",
+          "correct": true
+        },
+        {
+          "id": "formula",
+          "label": "The slope formula is wrong"
+        },
+        {
+          "id": "none",
+          "label": "No reason — linear trends always hold"
+        }
+      ],
+      "hints": [
+        "Compare 60 to the largest observed x (20).",
+        "Scores can't exceed 100; the linear trend must flatten well before 60."
+      ],
+      "feedback": {
+        "wrong": "60 is triple the observed range — that's extrapolation."
+      },
+      "solution": {
+        "body": "**60 hours is extrapolation** (observed range 10–20). Scores can't exceed 100 and the linear trend must flatten — the prediction is meaningless.",
+        "takeaway": "A good analysis names direction/strength, predicts inside the data range, and flags extrapolation as unreliable."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "wrap-up",
+      "type": "intro",
+      "title": "Chapter 2 complete",
+      "body": "You matched scatterplots to r, interpreted slopes, predicted safely inside the data, and squared r for explanatory power.\n\n*Next up:* probability — complements, overlap, independence, and trees."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "auth": {
+    "providers": {
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Brillyant",
+        "supportEmail": "ellie.zhang@alphaaiengineering.com"
+      }
+    },
+    "authorizedDomains": [
+      "localhost",
+      "stuff-18453.web.app",
+      "stuff-18453.firebaseapp.com"
+    ]
+  }
+}

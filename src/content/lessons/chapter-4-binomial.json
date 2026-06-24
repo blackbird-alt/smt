@@ -1,0 +1,363 @@
+{
+  "id": "chapter-4-binomial",
+  "title": "Chapter 4 — Binomial Distribution",
+  "steps": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "title": "Repeated trials, predictable shape",
+      "body": "Binomial models count successes across a fixed number of independent yes/no trials with constant probability. You'll identify valid binomial settings, compute probabilities, and interpret the mean, standard deviation, and shape of the distribution.",
+      "definitions": [
+        { "term": "Binomial setting", "definition": "A fixed number n of independent trials, each a success/failure with the same probability p." },
+        { "term": "Combination C(n, k)", "definition": "The number of ways to choose k successes out of n trials, ignoring order." },
+        { "term": "Binomial probability", "definition": "P(k successes) = C(n, k) × p^k × (1 − p)^(n − k)." },
+        { "term": "Mean", "definition": "The expected number of successes: μ = np." },
+        { "term": "Standard deviation", "definition": "Spread of the success count: σ = √(np(1 − p))." },
+        { "term": "Shape", "definition": "Symmetric when p ≈ 0.5; skewed right for small p and left for large p." }
+      ]
+    },
+    {
+      "id": "4-1",
+      "type": "distribution-choice",
+      "title": "Identify a binomial setting",
+      "context": "Pick the scenario that fits all binomial conditions.",
+      "prompt": "Which chart shows a binomial pattern (fixed trials, two outcomes)?",
+      "options": [
+        {
+          "id": "coin",
+          "label": "20 fair coin flips",
+          "probabilities": [
+            0.05,
+            0.15,
+            0.25,
+            0.25,
+            0.2
+          ],
+          "correct": true
+        },
+        {
+          "id": "cards",
+          "label": "Draw 20 cards without replacement",
+          "probabilities": [
+            0.4,
+            0.3,
+            0.15,
+            0.1,
+            0.05
+          ]
+        },
+        {
+          "id": "flat",
+          "label": "Every count equally likely",
+          "probabilities": [
+            0.2,
+            0.2,
+            0.2,
+            0.2,
+            0.2
+          ]
+        }
+      ],
+      "hints": [
+        "Check: fixed n, two outcomes, independent trials, constant p.",
+        "Without replacement changes p each draw, breaking a key binomial condition."
+      ],
+      "feedback": {
+        "wrong": "A binomial process needs fixed n, independent yes/no trials, and constant p."
+      },
+      "solution": {
+        "body": "Twenty fair-coin flips are binomial: fixed n = 20, success/failure outcomes, independent flips, and constant p = 0.5.",
+        "takeaway": "Always test all four binomial assumptions before calculating."
+      },
+      "faces": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    {
+      "id": "4-2",
+      "type": "tap-choice",
+      "title": "Compute a combination",
+      "context": "You need the coefficient in a binomial probability.",
+      "prompt": "Evaluate 7 choose 3 (7C3).",
+      "options": [
+        { "id": "a", "label": "35", "correct": true },
+        { "id": "b", "label": "210" },
+        { "id": "c", "label": "21" },
+        { "id": "d", "label": "343" }
+      ],
+      "hints": [
+        "Use nCk = n! / (k!(n-k)!).",
+        "7C3 = (7 x 6 x 5) / (3 x 2 x 1)."
+      ],
+      "feedback": {
+        "wrong": "Compute 7C3 with the combination formula."
+      },
+      "solution": {
+        "body": "7C3 = 35.",
+        "takeaway": "Combinations count selections when order does not matter."
+      }
+    },
+    {
+      "id": "4-3",
+      "type": "tap-choice",
+      "title": "Exactly k successes",
+      "context": "A 6-question multiple-choice quiz has one correct option out of four per question. A student guesses on every question.",
+      "prompt": "Find P(exactly 2 correct), where X ~ Bin(6, 0.25).",
+      "options": [
+        { "id": "a", "label": "0.30", "correct": true },
+        { "id": "b", "label": "0.06" },
+        { "id": "c", "label": "0.25" },
+        { "id": "d", "label": "0.53" }
+      ],
+      "hints": [
+        "Use X ~ Bin(n = 6, p = 0.25) and P(X = 2) = 6C2 p^2 (1-p)^4.",
+        "Compute 15 x (0.25)^2 x (0.75)^4."
+      ],
+      "feedback": {
+        "wrong": "Apply the binomial PMF with n = 6, k = 2, p = 0.25."
+      },
+      "solution": {
+        "body": "P(X = 2) = 6C2(0.25)^2(0.75)^4 = 15(0.0625)(0.3164) ≈ 0.30.",
+        "takeaway": "The PMF combines counting (nCk) with weighted success/failure powers."
+      }
+    },
+    {
+      "id": "4-4",
+      "type": "tap-choice",
+      "title": "At least one failure",
+      "context": "Each of 4 components passes inspection with probability 0.9, independently.",
+      "prompt": "Find P(at least one component fails).",
+      "options": [
+        { "id": "a", "label": "0.34", "correct": true },
+        { "id": "b", "label": "0.10" },
+        { "id": "c", "label": "0.66" },
+        { "id": "d", "label": "0.40" }
+      ],
+      "hints": [
+        "Use the complement: at least one fail = 1 - none fail.",
+        "None fail means all four pass: 0.9^4."
+      ],
+      "feedback": {
+        "wrong": "Compute 1 - (0.9)^4."
+      },
+      "solution": {
+        "body": "P(at least one fail) = 1 - 0.9^4 = 1 - 0.6561 = 0.3439 ≈ 0.34.",
+        "takeaway": "Complement methods simplify many \"at least one\" binomial questions."
+      }
+    },
+    {
+      "id": "4-5",
+      "type": "tap-choice",
+      "title": "Binomial mean",
+      "context": "X ~ Bin(n = 80, p = 0.25).",
+      "prompt": "What is the mean of X?",
+      "options": [
+        { "id": "a", "label": "20", "correct": true },
+        { "id": "b", "label": "60" },
+        { "id": "c", "label": "15" },
+        { "id": "d", "label": "0.25" }
+      ],
+      "hints": [
+        "For a binomial variable, mean mu = np.",
+        "Multiply 80 x 0.25."
+      ],
+      "feedback": {
+        "wrong": "Use mu = np."
+      },
+      "solution": {
+        "body": "mu = np = 80(0.25) = 20.",
+        "takeaway": "Binomial mean gives the long-run average count of successes."
+      }
+    },
+    {
+      "id": "4-6",
+      "type": "tap-choice",
+      "title": "Binomial standard deviation",
+      "context": "Y ~ Bin(n = 100, p = 0.04).",
+      "prompt": "Approximate the standard deviation of Y.",
+      "options": [
+        { "id": "a", "label": "1.96", "correct": true },
+        { "id": "b", "label": "3.84" },
+        { "id": "c", "label": "4" },
+        { "id": "d", "label": "0.2" }
+      ],
+      "hints": [
+        "Use sigma = sqrt(np(1-p)).",
+        "Compute sqrt(100 x 0.04 x 0.96) = sqrt(3.84)."
+      ],
+      "feedback": {
+        "wrong": "Use sigma = sqrt(np(1-p)) and round appropriately."
+      },
+      "solution": {
+        "body": "sigma = sqrt(100 x 0.04 x 0.96) = sqrt(3.84) ≈ 1.96.",
+        "takeaway": "Binomial spread depends on n and both p and 1-p."
+      }
+    },
+    {
+      "id": "featured-binomial",
+      "type": "binomial-explore",
+      "title": "Binomial distribution explorer",
+      "prompt": "Slide n and p, watch bars move, and track how mean, SD, and skewness change in real time.",
+      "initialN": 12,
+      "initialP": 0.25,
+      "feedback": {
+        "ready": "Binomial center is np, spread is sqrt(np(1-p)), and shape depends mostly on p."
+      }
+    },
+    {
+      "id": "4-7",
+      "type": "distribution-choice",
+      "title": "Read center and skew",
+      "context": "Suppose X ~ Bin(n = 12, p = 0.25).",
+      "prompt": "Which binomial shape has center near 3 and a right tail (p = 0.25, n = 12)?",
+      "options": [
+        {
+          "id": "left",
+          "label": "Skewed left",
+          "probabilities": [
+            0.05,
+            0.15,
+            0.35,
+            0.3,
+            0.15
+          ]
+        },
+        {
+          "id": "right",
+          "label": "Skewed right",
+          "probabilities": [
+            0.2,
+            0.25,
+            0.25,
+            0.18,
+            0.12
+          ],
+          "correct": true
+        },
+        {
+          "id": "sym",
+          "label": "Symmetric",
+          "probabilities": [
+            0.05,
+            0.2,
+            0.5,
+            0.2,
+            0.05
+          ]
+        }
+      ],
+      "hints": [
+        "Center is near mu = np.",
+        "When p < 0.5, the binomial shape is usually skewed right."
+      ],
+      "feedback": {
+        "wrong": "Use mu = np for center and compare p to 0.5 for skew direction."
+      },
+      "solution": {
+        "body": "mu = 12(0.25) = 3, and because p < 0.5 the mass piles near small counts with a right tail.",
+        "takeaway": "Center comes from np; skew comes from how far p is from 0.5."
+      },
+      "faces": [
+        "0",
+        "2",
+        "4",
+        "6",
+        "8"
+      ]
+    },
+    {
+      "id": "4-8a",
+      "type": "tap-choice",
+      "title": "Quality check setup",
+      "context": "A factory tests 8 light bulbs. Each bulb works with probability 0.7, independently.",
+      "prompt": "Is X = number of working bulbs binomial?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Yes, X ~ Bin(8, 0.7)",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "label": "No, because p must be 0.5"
+        },
+        {
+          "id": "c",
+          "label": "No, because n must be larger than 30"
+        }
+      ],
+      "hints": [
+        "Check the four binomial conditions one by one.",
+        "Here n is fixed, outcomes are success/failure, trials are independent, and p stays 0.7."
+      ],
+      "feedback": {
+        "wrong": "All binomial assumptions are satisfied in this scenario."
+      },
+      "solution": {
+        "body": "Yes. This is a binomial count with n = 8 and p = 0.7.",
+        "takeaway": "Binomial modeling starts with assumptions, not formulas."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "4-8b",
+      "type": "tap-choice",
+      "title": "Exact count probability",
+      "context": "Same setup: X ~ Bin(8, 0.7).",
+      "prompt": "Approximate P(exactly 6 working bulbs).",
+      "options": [
+        { "id": "a", "label": "0.30", "correct": true },
+        { "id": "b", "label": "0.12" },
+        { "id": "c", "label": "0.06" },
+        { "id": "d", "label": "0.70" }
+      ],
+      "hints": [
+        "Use P(X = 6) = 8C6 (0.7)^6 (0.3)^2.",
+        "8C6 = 28."
+      ],
+      "feedback": {
+        "wrong": "Use the binomial PMF with n = 8, k = 6, p = 0.7."
+      },
+      "solution": {
+        "body": "P(X = 6) = 8C6(0.7)^6(0.3)^2 = 28(0.117649)(0.09) ≈ 0.30.",
+        "takeaway": "Exact-k probabilities combine one coefficient with two powers."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "4-8c",
+      "type": "tap-choice",
+      "title": "At least one failure",
+      "context": "Same setup: X ~ Bin(8, 0.7).",
+      "prompt": "Approximate P(at least one bulb fails).",
+      "options": [
+        { "id": "a", "label": "0.94", "correct": true },
+        { "id": "b", "label": "0.06" },
+        { "id": "c", "label": "0.30" },
+        { "id": "d", "label": "0.70" }
+      ],
+      "hints": [
+        "Use the complement of all bulbs working.",
+        "P(all 8 work) = 0.7^8."
+      ],
+      "feedback": {
+        "wrong": "Compute 1 - 0.7^8."
+      },
+      "solution": {
+        "body": "P(at least one fails) = 1 - 0.7^8 = 1 - 0.05765 ≈ 0.94.",
+        "takeaway": "Capstone workflow: validate binomial assumptions, compute exact-k, then use complements for at-least-one."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "wrap-up",
+      "type": "intro",
+      "title": "Chapter 4 complete",
+      "body": "You classified binomial experiments, computed coefficients and PMF values, and interpreted center, spread, and skew.\n\nNext up: normal curves, z-scores, areas, and sampling distributions."
+    }
+  ]
+}

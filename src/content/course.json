@@ -1,0 +1,93 @@
+{
+  "id": "probability-statistics",
+  "title": "Probability & Statistics",
+  "subject": "Interactive Course",
+  "description": "A Brilliant-style stats course — averages, correlation, probability, binomial, normal curves, and estimation. Every problem is answerable, with progressive hints and gated solutions.",
+  "persona": "Alex learns by doing: drag, compute, choose — then read the takeaway.",
+  "lessons": [
+    {
+      "id": "chapter-1-averages",
+      "title": "Chapter 1 — Averages and Variation",
+      "description": "Mode, mean, median, weighted mean, spread, z-scores, and the IQR outlier rule.",
+      "estimatedMinutes": 45,
+      "order": 1,
+      "available": true
+    },
+    {
+      "id": "chapter-2-correlation",
+      "title": "Chapter 2 — Correlation and Regression",
+      "description": "Scatterplots, r, causation traps, slope/intercept, prediction, and r².",
+      "estimatedMinutes": 45,
+      "order": 2,
+      "available": true
+    },
+    {
+      "id": "chapter-3-probability",
+      "title": "Chapter 3 — Elementary Probability",
+      "description": "Complements, addition with overlap, independence, trees, and counting.",
+      "estimatedMinutes": 45,
+      "order": 3,
+      "available": true
+    },
+    {
+      "id": "chapter-4-binomial",
+      "title": "Chapter 4 — Binomial Distribution",
+      "description": "Classify binomial settings, coefficients, mean, SD, and shape.",
+      "estimatedMinutes": 40,
+      "order": 4,
+      "available": true
+    },
+    {
+      "id": "chapter-5-normal",
+      "title": "Chapter 5 — Normal Curves & Sampling",
+      "description": "Empirical rule, z-scores, areas, CLT, and sample-mean probabilities.",
+      "estimatedMinutes": 45,
+      "order": 5,
+      "available": true
+    },
+    {
+      "id": "chapter-6-estimation",
+      "title": "Chapter 6 — Estimation",
+      "description": "Point estimates, confidence intervals, margins of error, and sample size.",
+      "estimatedMinutes": 45,
+      "order": 6,
+      "available": true
+    },
+    {
+      "id": "chapter-7-hypothesis",
+      "title": "Chapter 7 — Hypothesis Testing",
+      "description": "Null and alternative hypotheses, test statistics, p-values, and error types.",
+      "estimatedMinutes": 45,
+      "order": 7,
+      "available": true,
+      "premium": true
+    },
+    {
+      "id": "chapter-8-two-groups",
+      "title": "Chapter 8 — Comparing Two Groups",
+      "description": "Paired vs independent designs, differences of means, and difference intervals.",
+      "estimatedMinutes": 45,
+      "order": 8,
+      "available": true,
+      "premium": true
+    },
+    {
+      "id": "chapter-9-chi-square",
+      "title": "Chapter 9 — Chi-Square Tests",
+      "description": "Goodness-of-fit, independence, expected counts, and degrees of freedom.",
+      "estimatedMinutes": 40,
+      "order": 9,
+      "available": true,
+      "premium": true
+    },
+    {
+      "id": "chapter-10-regression-inference",
+      "title": "Chapter 10 — Inference for Regression",
+      "description": "Testing the slope, prediction, interpreting coefficients, and r-squared.",
+      "estimatedMinutes": 45,
+      "order": 10,
+      "available": true,
+      "premium": true
+    }
+  ]
+}

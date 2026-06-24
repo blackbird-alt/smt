@@ -1,0 +1,338 @@
+{
+  "id": "chapter-6-estimation",
+  "title": "Chapter 6 — Estimation",
+  "steps": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "title": "Estimate, then quantify uncertainty",
+      "body": "Point estimates summarize a population with one number, but samples vary. This chapter covers standard errors, margins of error, confidence intervals, correct interpretation, and sample-size planning.",
+      "definitions": [
+        { "term": "Point estimate", "definition": "A single best-guess value for a population parameter (e.g., x̄ estimates μ)." },
+        { "term": "Standard error", "definition": "The sampling variability of an estimate: SE = σ ÷ √n." },
+        { "term": "Margin of error", "definition": "How far the estimate may be off: MOE = z* × SE." },
+        { "term": "Confidence interval", "definition": "A range, estimate ± MOE, likely to contain the true parameter." },
+        { "term": "Confidence level", "definition": "The long-run share of such intervals that capture the parameter (e.g., 95%)." },
+        { "term": "Critical value z*", "definition": "The multiplier that sets the confidence level (1.96 for 95%)." }
+      ]
+    },
+    {
+      "id": "6-1",
+      "type": "tap-choice",
+      "title": "Identify a point estimate",
+      "context": "A sample of 64 customers reports average wait time of 12.4 minutes at a coffee shop.",
+      "prompt": "What is the point estimate for the population mean wait time?",
+      "options": [
+        {
+          "id": "a",
+          "label": "12.4 minutes",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "label": "64 minutes"
+        },
+        {
+          "id": "c",
+          "label": "1.96 minutes"
+        }
+      ],
+      "hints": [
+        "A point estimate is a single sample statistic used to estimate a parameter.",
+        "For population mean, the point estimator is sample mean x-bar."
+      ],
+      "feedback": {
+        "wrong": "Use the sample mean as the point estimate for population mean."
+      },
+      "solution": {
+        "body": "The point estimate is x-bar = 12.4 minutes.",
+        "takeaway": "Point estimates are sample statistics standing in for unknown parameters."
+      }
+    },
+    {
+      "id": "6-2",
+      "type": "tap-choice",
+      "title": "Compute standard error",
+      "context": "Assume population SD sigma = 12 and sample size n = 36.",
+      "prompt": "Find SE of x-bar.",
+      "options": [
+        { "id": "a", "label": "2", "correct": true },
+        { "id": "b", "label": "12" },
+        { "id": "c", "label": "6" },
+        { "id": "d", "label": "0.33" }
+      ],
+      "hints": [
+        "SE for sample mean is sigma/sqrt(n).",
+        "12/sqrt(36) = 12/6."
+      ],
+      "feedback": {
+        "wrong": "Use sigma/sqrt(n) to compute SE."
+      },
+      "solution": {
+        "body": "SE = 12/sqrt(36) = 2.",
+        "takeaway": "Standard error measures sampling variability of the estimator."
+      }
+    },
+    {
+      "id": "6-2b",
+      "type": "normal-shade",
+      "title": "Where z* = 1.96 comes from",
+      "prompt": "A 95% confidence interval keeps the middle 95% of the normal sampling distribution. Drag the bounds to about z = −2 and z = +2 (the exact cutoffs are ±1.96) and watch the shaded area approach 95%. Those cutoffs are the z* you multiply by the standard error.",
+      "initialLow": -2,
+      "initialHigh": 2,
+      "feedback": {
+        "ready": "The central ~95% sits between z ≈ ±1.96 — that's why z* = 1.96 for 95% confidence. Want 99%? Widen the bounds (z* ≈ 2.58). Want 90%? Narrow them (z* ≈ 1.645)."
+      }
+    },
+    {
+      "id": "6-3",
+      "type": "tap-choice",
+      "title": "Margin of error",
+      "context": "For a 95% CI with known sigma: z* = 1.96, sigma = 10, n = 100.",
+      "prompt": "Find the margin of error (MOE = z* x sigma/sqrt(n)).",
+      "options": [
+        { "id": "a", "label": "1.96", "correct": true },
+        { "id": "b", "label": "19.6" },
+        { "id": "c", "label": "0.196" },
+        { "id": "d", "label": "1.0" }
+      ],
+      "hints": [
+        "MOE = z* x sigma/sqrt(n).",
+        "Compute 1.96 x (10/10)."
+      ],
+      "feedback": {
+        "wrong": "Multiply z* by the standard error."
+      },
+      "solution": {
+        "body": "MOE = 1.96 x (10/sqrt(100)) = 1.96.",
+        "takeaway": "Confidence intervals are estimate plus/minus a margin of error."
+      }
+    },
+    {
+      "id": "6-4",
+      "type": "tap-choice",
+      "title": "Build interval endpoints",
+      "context": "A sample mean is x-bar = 52 with margin of error 1.96.",
+      "prompt": "What is the lower endpoint of the interval (x̄ − MOE) when x̄ = 52 and MOE = 1.96?",
+      "options": [
+        { "id": "a", "label": "50.04", "correct": true },
+        { "id": "b", "label": "53.96" },
+        { "id": "c", "label": "51.04" },
+        { "id": "d", "label": "48.04" }
+      ],
+      "hints": [
+        "Lower endpoint is x-bar - MOE.",
+        "Compute 52 - 1.96."
+      ],
+      "feedback": {
+        "wrong": "Subtract the margin of error from 52."
+      },
+      "solution": {
+        "body": "Lower endpoint = 52 - 1.96 = 50.04 (upper would be 53.96).",
+        "takeaway": "Always anchor interval endpoints at the estimate before adding/subtracting MOE."
+      }
+    },
+    {
+      "id": "featured-ci",
+      "type": "ci-simulator",
+      "title": "Confidence interval simulator",
+      "prompt": "Run repeated samples and watch 95% confidence intervals either capture or miss the true mean.",
+      "populationMean": 100,
+      "populationSd": 15,
+      "sampleSize": 25,
+      "zStar": 1.96,
+      "feedback": {
+        "ready": "A 95% method captures the true mean about 95% of repeated samples, not every single interval."
+      }
+    },
+    {
+      "id": "6-5",
+      "type": "tap-choice",
+      "title": "Correct CI interpretation",
+      "context": "You computed a 95% confidence interval for a population mean.",
+      "prompt": "Which interpretation is correct?",
+      "options": [
+        {
+          "id": "a",
+          "label": "95% of individual observations lie in this interval"
+        },
+        {
+          "id": "b",
+          "label": "There is a 95% chance this fixed interval contains mu"
+        },
+        {
+          "id": "c",
+          "label": "Using this method repeatedly, about 95% of intervals will contain mu",
+          "correct": true
+        }
+      ],
+      "hints": [
+        "Confidence level describes the long-run success rate of the procedure.",
+        "After data are collected, the interval is fixed; the parameter is fixed too."
+      ],
+      "feedback": {
+        "wrong": "Interpret confidence as repeated-sampling capture rate."
+      },
+      "solution": {
+        "body": "The right interpretation is long-run method performance: about 95% of similarly constructed intervals capture mu.",
+        "takeaway": "Confidence belongs to the method, not to one realized interval as a probability statement about mu."
+      }
+    },
+    {
+      "id": "6-6",
+      "type": "tap-choice",
+      "title": "How sample size changes precision",
+      "context": "Suppose all else is unchanged and confidence level stays at 95%.",
+      "prompt": "If sample size quadruples, what happens to margin of error?",
+      "options": [
+        {
+          "id": "a",
+          "label": "It doubles"
+        },
+        {
+          "id": "b",
+          "label": "It is cut in half",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "label": "It stays the same"
+        }
+      ],
+      "hints": [
+        "MOE scales with 1/sqrt(n).",
+        "If n becomes 4n, sqrt(n) doubles."
+      ],
+      "feedback": {
+        "wrong": "Use the square-root relationship between n and MOE."
+      },
+      "solution": {
+        "body": "MOE is halved because MOE proportional to 1/sqrt(n) and sqrt(4n) = 2sqrt(n).",
+        "takeaway": "Precision improves slowly: big gains in n create moderate gains in MOE."
+      }
+    },
+    {
+      "id": "6-7",
+      "type": "tap-choice",
+      "title": "Plan required sample size",
+      "context": "Target a 95% CI with margin of error at most 2. Assume sigma = 12 and z* = 1.96.",
+      "prompt": "What minimum sample size n is required?",
+      "options": [
+        { "id": "a", "label": "139", "correct": true },
+        { "id": "b", "label": "138" },
+        { "id": "c", "label": "12" },
+        { "id": "d", "label": "70" }
+      ],
+      "hints": [
+        "Solve n >= (z* x sigma / MOE)^2.",
+        "(1.96 x 12 / 2)^2 = 138.3, then round up."
+      ],
+      "feedback": {
+        "wrong": "Compute n from the MOE formula, then round up to the next whole number."
+      },
+      "solution": {
+        "body": "n >= (1.96 x 12 / 2)^2 = 138.3, so minimum n is 139.",
+        "takeaway": "Always round sample-size calculations up to guarantee the target precision."
+      }
+    },
+    {
+      "id": "6-8a",
+      "type": "tap-choice",
+      "title": "Polling estimate",
+      "context": "A poll of n = 400 voters finds 54% support for a proposal.",
+      "prompt": "What is the point estimate of true support p?",
+      "options": [
+        {
+          "id": "a",
+          "label": "0.54",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "label": "0.46"
+        },
+        {
+          "id": "c",
+          "label": "400"
+        }
+      ],
+      "hints": [
+        "For a population proportion, use sample proportion p-hat.",
+        "p-hat is the observed percent in decimal form."
+      ],
+      "feedback": {
+        "wrong": "The point estimate for p is p-hat from the sample."
+      },
+      "solution": {
+        "body": "The point estimate is p-hat = 0.54.",
+        "takeaway": "Capstone starts from the sample statistic that estimates the target parameter."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "6-8b",
+      "type": "tap-choice",
+      "title": "Proportion margin of error",
+      "context": "Use a 95% interval for p with p-hat = 0.54 and n = 400.",
+      "prompt": "Approximate the margin of error (MOE = 1.96 x sqrt(p-hat(1-p-hat)/n)).",
+      "options": [
+        { "id": "a", "label": "0.05", "correct": true },
+        { "id": "b", "label": "0.02" },
+        { "id": "c", "label": "0.10" },
+        { "id": "d", "label": "0.25" }
+      ],
+      "hints": [
+        "MOE = 1.96 x sqrt(p-hat(1-p-hat)/n).",
+        "Compute 1.96 x sqrt(0.54 x 0.46 / 400)."
+      ],
+      "feedback": {
+        "wrong": "Use the 95% proportion MOE formula with p-hat and n."
+      },
+      "solution": {
+        "body": "MOE ≈ 1.96 x sqrt(0.54 x 0.46 / 400) ≈ 0.0488, about 0.05.",
+        "takeaway": "For proportions, uncertainty depends on both p-hat and sample size."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "6-8c",
+      "type": "tap-choice",
+      "title": "Decision from the interval",
+      "context": "From parts above, a 95% CI is approximately 0.54 +/- 0.05, or [0.49, 0.59].",
+      "prompt": "What conclusion is justified about majority support (> 50%)?",
+      "options": [
+        {
+          "id": "a",
+          "label": "Yes, majority is guaranteed because 0.54 > 0.50"
+        },
+        {
+          "id": "b",
+          "label": "No clear majority conclusion because 0.50 is inside the interval (0.49 to 0.59)",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "label": "Support is definitely below 50%"
+        }
+      ],
+      "hints": [
+        "Check whether 0.50 lies inside or outside the confidence interval.",
+        "If the null benchmark is inside the interval, evidence is not decisive at that confidence level."
+      ],
+      "feedback": {
+        "wrong": "Use interval inclusion: if 0.50 is inside, majority support is not confirmed."
+      },
+      "solution": {
+        "body": "Because 0.50 lies inside [0.49, 0.59], the data do not conclusively show majority support at the 95% level.",
+        "takeaway": "Capstone flow: estimate, compute MOE, build CI, and judge claims by whether benchmark values are excluded."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "wrap-up",
+      "type": "intro",
+      "title": "Chapter 6 complete",
+      "body": "You built estimation workflows from point estimates to confidence intervals, margin of error, and sample-size planning.\n\nYou can now move from raw samples to defensible statistical claims with quantified uncertainty."
+    }
+  ]
+}

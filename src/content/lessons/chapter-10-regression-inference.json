@@ -1,0 +1,242 @@
+{
+  "id": "chapter-10-regression-inference",
+  "title": "Chapter 10 — Inference for Regression",
+  "premium": true,
+  "steps": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "title": "From a line to a conclusion",
+      "body": "Chapter 2 fit a regression line; now you'll decide whether the relationship is real. This chapter covers the population slope, testing for a nonzero slope, the standard error of the slope, prediction, and how r-squared describes fit."
+    },
+    {
+      "id": "10-1",
+      "type": "tap-choice",
+      "title": "Hypotheses for a slope",
+      "context": "You fit y = b0 + b1 x and want to know if x truly predicts y.",
+      "prompt": "What is the null hypothesis about the population slope beta1?",
+      "options": [
+        { "id": "a", "label": "beta1 = 0", "correct": true },
+        { "id": "b", "label": "beta1 ≠ 0" },
+        { "id": "c", "label": "b1 = 0 (the sample slope)" }
+      ],
+      "hints": [
+        "The null says there is no linear relationship.",
+        "Slope hypotheses are about the population parameter beta1."
+      ],
+      "feedback": {
+        "wrong": "The 'no relationship' null sets the population slope to zero."
+      },
+      "solution": {
+        "body": "H0: beta1 = 0 means x has no linear effect on y.",
+        "takeaway": "Regression inference centers on whether the true slope is zero."
+      }
+    },
+    {
+      "id": "10-2",
+      "type": "number-input",
+      "title": "Slope test statistic",
+      "context": "The estimated slope is b1 = 2.4 with standard error SE(b1) = 0.6.",
+      "prompt": "Compute t = b1 / SE(b1).",
+      "correct": 4,
+      "tolerance": 0.05,
+      "hints": [
+        "Under H0, t = b1 / SE(b1).",
+        "2.4 / 0.6 = ?"
+      ],
+      "feedback": {
+        "wrong": "Divide the estimated slope by its standard error."
+      },
+      "solution": {
+        "body": "t = 2.4 / 0.6 = 4.",
+        "takeaway": "A slope t-statistic measures how many standard errors the slope sits from zero."
+      }
+    },
+    {
+      "id": "10-3",
+      "type": "tap-choice",
+      "title": "Decide on the slope",
+      "context": "The two-sided p-value for the slope is 0.001 at alpha = 0.05.",
+      "prompt": "What is the conclusion about the relationship?",
+      "options": [
+        { "id": "a", "label": "Reject H0: there is a significant linear relationship", "correct": true },
+        { "id": "b", "label": "Fail to reject H0: no evidence of a relationship" },
+        { "id": "c", "label": "Accept H0: the slope is exactly zero" }
+      ],
+      "hints": [
+        "Compare 0.001 to alpha.",
+        "A tiny p-value is strong evidence against a zero slope."
+      ],
+      "feedback": {
+        "wrong": "Since p < alpha, reject H0 and report a significant slope."
+      },
+      "solution": {
+        "body": "Because 0.001 < 0.05, reject H0: x significantly predicts y.",
+        "takeaway": "A significant slope means the linear relationship is unlikely to be chance."
+      }
+    },
+    {
+      "id": "10-4",
+      "type": "number-input",
+      "title": "Predict from the line",
+      "context": "A fitted model is y-hat = 5 + 3x.",
+      "prompt": "Predict y when x = 4.",
+      "correct": 17,
+      "tolerance": 0.1,
+      "hints": [
+        "Plug x into y-hat = 5 + 3x.",
+        "5 + 3(4) = ?"
+      ],
+      "feedback": {
+        "wrong": "Substitute x = 4 into the regression equation."
+      },
+      "solution": {
+        "body": "y-hat = 5 + 3(4) = 17.",
+        "takeaway": "The fitted line gives point predictions for new x values."
+      }
+    },
+    {
+      "id": "10-5",
+      "type": "tap-choice",
+      "title": "Interpret the slope",
+      "context": "A model predicts monthly spending from income, with slope b1 = 0.18.",
+      "prompt": "What does the slope mean here?",
+      "options": [
+        { "id": "a", "label": "Each extra unit of income predicts 0.18 more units of spending", "correct": true },
+        { "id": "b", "label": "Spending is 0.18 when income is zero" },
+        { "id": "c", "label": "18% of the variation in spending is explained" }
+      ],
+      "hints": [
+        "Slope is the predicted change in y per one-unit change in x.",
+        "The intercept, not the slope, describes x = 0."
+      ],
+      "feedback": {
+        "wrong": "The slope is the predicted change in y per unit of x."
+      },
+      "solution": {
+        "body": "A one-unit rise in income predicts a 0.18-unit rise in spending, on average.",
+        "takeaway": "Slope = rate of predicted change in y per unit x."
+      }
+    },
+    {
+      "id": "10-6",
+      "type": "number-input",
+      "title": "From r to r-squared",
+      "context": "The correlation between x and y is r = 0.6.",
+      "prompt": "Compute r-squared (the coefficient of determination).",
+      "correct": 0.36,
+      "decimalPlaces": 2,
+      "tolerance": 0.01,
+      "hints": [
+        "r-squared = r x r.",
+        "0.6^2 = ?"
+      ],
+      "feedback": {
+        "wrong": "Square the correlation to get r-squared."
+      },
+      "solution": {
+        "body": "r-squared = 0.6^2 = 0.36.",
+        "takeaway": "r-squared is the fraction of variation in y explained by the model."
+      }
+    },
+    {
+      "id": "10-7",
+      "type": "tap-choice",
+      "title": "What r-squared means",
+      "context": "A regression reports r-squared = 0.36.",
+      "prompt": "Which interpretation is correct?",
+      "options": [
+        { "id": "a", "label": "36% of the variation in y is explained by x", "correct": true },
+        { "id": "b", "label": "The slope equals 0.36" },
+        { "id": "c", "label": "Predictions are correct 36% of the time" }
+      ],
+      "hints": [
+        "r-squared is a proportion of variance explained.",
+        "It is not the slope or an accuracy rate."
+      ],
+      "feedback": {
+        "wrong": "r-squared is the proportion of variance in y explained by the model."
+      },
+      "solution": {
+        "body": "r-squared = 0.36 means 36% of the variability in y is accounted for by x.",
+        "takeaway": "Report r-squared as percent of variance explained."
+      }
+    },
+    {
+      "id": "10-8a",
+      "type": "tap-choice",
+      "title": "Capstone — set up the slope test",
+      "context": "A study models exam score from hours studied and wants to know if studying helps.",
+      "prompt": "What hypotheses test whether studying helps (positive slope)?",
+      "options": [
+        { "id": "a", "label": "H0: beta1 = 0 vs Ha: beta1 > 0", "correct": true },
+        { "id": "b", "label": "H0: beta1 > 0 vs Ha: beta1 = 0" },
+        { "id": "c", "label": "H0: r = 0 vs Ha: r-squared = 1" }
+      ],
+      "hints": [
+        "'Helps' implies a positive slope.",
+        "Direction goes in the alternative."
+      ],
+      "feedback": {
+        "wrong": "A positive-effect claim uses Ha: beta1 > 0."
+      },
+      "solution": {
+        "body": "H0: beta1 = 0 vs Ha: beta1 > 0, a one-sided slope test.",
+        "takeaway": "Capstone step 1: translate the claim into slope hypotheses."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "10-8b",
+      "type": "number-input",
+      "title": "Capstone — slope statistic",
+      "context": "Estimated slope b1 = 3.5 points per hour with SE(b1) = 1.0.",
+      "prompt": "Compute the slope t-statistic.",
+      "correct": 3.5,
+      "decimalPlaces": 2,
+      "tolerance": 0.05,
+      "hints": [
+        "t = b1 / SE(b1).",
+        "3.5 / 1.0 = ?"
+      ],
+      "feedback": {
+        "wrong": "Divide the slope by its standard error."
+      },
+      "solution": {
+        "body": "t = 3.5 / 1.0 = 3.5.",
+        "takeaway": "Capstone step 2: standardize the slope estimate."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "10-8c",
+      "type": "tap-choice",
+      "title": "Capstone — final call",
+      "context": "The one-sided p-value for t = 3.5 is about 0.001, with alpha = 0.05.",
+      "prompt": "What do you conclude about studying and scores?",
+      "options": [
+        { "id": "a", "label": "Reject H0: more study hours significantly predict higher scores", "correct": true },
+        { "id": "b", "label": "Fail to reject H0: studying has no measurable link" },
+        { "id": "c", "label": "Accept H0: the slope is exactly zero" }
+      ],
+      "hints": [
+        "Compare 0.001 to alpha.",
+        "State the conclusion in study-and-score terms."
+      ],
+      "feedback": {
+        "wrong": "Since p < alpha, reject H0 and report a significant positive slope."
+      },
+      "solution": {
+        "body": "Because 0.001 < 0.05, reject H0: study hours significantly predict higher exam scores.",
+        "takeaway": "Capstone flow: slope hypotheses, t-statistic, p-value, then a context conclusion."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "wrap-up",
+      "type": "intro",
+      "title": "Chapter 10 complete — course finished!",
+      "body": "You can now test a regression slope, predict from a fitted line, interpret slope and intercept, and report r-squared as variance explained.\n\nThat wraps the full Probability & Statistics path — from averages all the way to inference for regression. Nicely done."
+    }
+  ]
+}

@@ -1,0 +1,296 @@
+{
+  "id": "chapter-5-normal",
+  "title": "Chapter 5 — Normal Curves & Sampling",
+  "steps": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "title": "Bell curves and standardized thinking",
+      "body": "Normal models describe many real-world measurements. You'll standardize values with z-scores, find areas under the curve, use the empirical rule, and apply the Central Limit Theorem to sample means.",
+      "definitions": [
+        { "term": "Normal distribution", "definition": "A symmetric, bell-shaped model centered at the mean." },
+        { "term": "Empirical rule", "definition": "About 68%, 95%, and 99.7% of data fall within 1, 2, and 3 standard deviations of the mean." },
+        { "term": "Z-score", "definition": "Standardized distance from the mean in standard deviations: z = (x − μ) ÷ σ." },
+        { "term": "Area under the curve", "definition": "The proportion of values in a region equals the area beneath the curve there." },
+        { "term": "Central Limit Theorem", "definition": "For large samples, the distribution of the sample mean is approximately normal." },
+        { "term": "Standard error", "definition": "The standard deviation of the sample mean: SE = σ ÷ √n." }
+      ]
+    },
+    {
+      "id": "5-1",
+      "type": "normal-probe",
+      "title": "Empirical rule checkpoint",
+      "context": "For a roughly normal distribution, recall the 68-95-99.7 rule.",
+      "prompt": "Shade the region between z = -1 and z = +1 to match the 68% rule.",
+      "hints": [
+        "The first number in 68-95-99.7 corresponds to +/-1 SD.",
+        "+/-2 SD uses 95%, and +/-3 SD uses 99.7%."
+      ],
+      "feedback": {
+        "wrong": "Use the 68-95-99.7 memory anchor."
+      },
+      "solution": {
+        "body": "About 68% of values lie between mu - sigma and mu + sigma.",
+        "takeaway": "The empirical rule gives fast probability approximations for normal data."
+      },
+      "initialLow": -0.5,
+      "initialHigh": 0.5,
+      "targetArea": 0.6827,
+      "tolerance": 0.02,
+      "targetLabel": "Target: about **68%** within 1 SD"
+    },
+    {
+      "id": "5-2",
+      "type": "tap-choice",
+      "title": "Compute a z-score",
+      "context": "Test scores are normal with mean 100 and SD 15.",
+      "prompt": "What is the z-score for a score of 130?",
+      "options": [
+        { "id": "a", "label": "2", "correct": true },
+        { "id": "b", "label": "30" },
+        { "id": "c", "label": "0.5" },
+        { "id": "d", "label": "8.67" }
+      ],
+      "hints": [
+        "Use z = (x - mu) / sigma.",
+        "(130 - 100) / 15 = 30/15."
+      ],
+      "feedback": {
+        "wrong": "Standardize with z = (x - mu)/sigma."
+      },
+      "solution": {
+        "body": "z = (130 - 100)/15 = 2.",
+        "takeaway": "A z-score reports how many SDs a value sits from the mean."
+      }
+    },
+    {
+      "id": "5-3",
+      "type": "tap-choice",
+      "title": "Convert z back to raw value",
+      "context": "Reaction times are normal with mean 70 ms and SD 8 ms.",
+      "prompt": "Find x (in ms) when z = -1.5.",
+      "options": [
+        { "id": "a", "label": "58 ms", "correct": true },
+        { "id": "b", "label": "82 ms" },
+        { "id": "c", "label": "70 ms" },
+        { "id": "d", "label": "12 ms" }
+      ],
+      "hints": [
+        "Rearrange to x = mu + z*sigma.",
+        "Compute 70 + (-1.5)(8)."
+      ],
+      "feedback": {
+        "wrong": "Use x = mu + z*sigma."
+      },
+      "solution": {
+        "body": "x = 70 + (-1.5)(8) = 58 ms.",
+        "takeaway": "You can move between raw values and z-scores in either direction."
+      }
+    },
+    {
+      "id": "featured-normal",
+      "type": "normal-shade",
+      "title": "Normal shading explorer",
+      "prompt": "Move the left and right z-bounds to shade probability regions and see area update instantly.",
+      "initialLow": -1,
+      "initialHigh": 1,
+      "feedback": {
+        "ready": "Areas under the normal curve are probabilities, and z-bounds define those regions."
+      }
+    },
+    {
+      "id": "5-4",
+      "type": "tap-choice",
+      "title": "Left-tail area",
+      "context": "Let Z be standard normal.",
+      "prompt": "Which value is closest to P(Z < 1.2)?",
+      "options": [
+        {
+          "id": "a",
+          "label": "0.1151"
+        },
+        {
+          "id": "b",
+          "label": "0.8849",
+          "correct": true
+        },
+        {
+          "id": "c",
+          "label": "0.5000"
+        }
+      ],
+      "hints": [
+        "A positive z should have left-tail area greater than 0.5.",
+        "Standard normal table gives about 0.8849 at z = 1.2."
+      ],
+      "feedback": {
+        "wrong": "Check whether the area should be above or below 0.5 before choosing."
+      },
+      "solution": {
+        "body": "P(Z < 1.2) ≈ 0.8849.",
+        "takeaway": "Sign and size of z should guide quick sanity checks on table values."
+      }
+    },
+    {
+      "id": "5-5",
+      "type": "normal-probe",
+      "title": "Middle area between bounds",
+      "context": "Let Z be standard normal.",
+      "prompt": "Shade the middle region P(-1 < Z < 1) on the standard normal curve.",
+      "hints": [
+        "This is the +/-1 SD interval for the standard normal.",
+        "You can also compute Phi(1) - Phi(-1)."
+      ],
+      "feedback": {
+        "wrong": "Use the +/-1 SD area for a standard normal curve."
+      },
+      "solution": {
+        "body": "P(-1 < Z < 1) ≈ 0.6827.",
+        "takeaway": "Between-bounds probabilities come from subtraction of cumulative areas."
+      },
+      "initialLow": -0.3,
+      "initialHigh": 0.3,
+      "targetArea": 0.6827,
+      "tolerance": 0.02,
+      "targetLabel": "Match the middle **68%** band"
+    },
+    {
+      "id": "5-6",
+      "type": "tap-choice",
+      "title": "Standard error of the sample mean",
+      "context": "Population SD is 12 and sample size is n = 36.",
+      "prompt": "What is the standard error of x-bar?",
+      "options": [
+        { "id": "a", "label": "2", "correct": true },
+        { "id": "b", "label": "12" },
+        { "id": "c", "label": "6" },
+        { "id": "d", "label": "0.33" }
+      ],
+      "hints": [
+        "Standard error for sample mean is sigma/sqrt(n).",
+        "12/sqrt(36) = 12/6."
+      ],
+      "feedback": {
+        "wrong": "Use sigma/sqrt(n) for sample-mean spread."
+      },
+      "solution": {
+        "body": "SE = 12/sqrt(36) = 2.",
+        "takeaway": "Sampling distributions narrow as n grows because SE shrinks like 1/sqrt(n)."
+      }
+    },
+    {
+      "id": "5-7",
+      "type": "tap-choice",
+      "title": "Sample-mean tail probability",
+      "context": "Population has mu = 100, sigma = 12. For samples of n = 36, consider x-bar.",
+      "prompt": "Approximate P(x-bar > 103).",
+      "options": [
+        {
+          "id": "a",
+          "label": "0.0668",
+          "correct": true
+        },
+        {
+          "id": "b",
+          "label": "0.5000"
+        },
+        {
+          "id": "c",
+          "label": "0.9332"
+        }
+      ],
+      "hints": [
+        "First find SE = 12/sqrt(36) = 2, then z = (103 - 100)/2 = 1.5.",
+        "Right tail above z = 1.5 is about 0.0668."
+      ],
+      "feedback": {
+        "wrong": "Standardize x-bar first, then use a right-tail normal area."
+      },
+      "solution": {
+        "body": "z = 1.5, so P(x-bar > 103) = P(Z > 1.5) ≈ 0.0668.",
+        "takeaway": "Sample-mean probabilities use SE, not the raw population SD."
+      }
+    },
+    {
+      "id": "5-8a",
+      "type": "tap-choice",
+      "title": "Z-score for an individual score",
+      "context": "Final exam scores are approximately normal with mu = 78 and sigma = 10.",
+      "prompt": "Find the z-score for x = 92.",
+      "options": [
+        { "id": "a", "label": "1.4", "correct": true },
+        { "id": "b", "label": "14" },
+        { "id": "c", "label": "0.71" },
+        { "id": "d", "label": "9.2" }
+      ],
+      "hints": [
+        "Use z = (x - mu)/sigma.",
+        "(92 - 78)/10 = 14/10."
+      ],
+      "feedback": {
+        "wrong": "Standardize 92 using mu = 78 and sigma = 10."
+      },
+      "solution": {
+        "body": "z = (92 - 78)/10 = 1.4.",
+        "takeaway": "Capstone starts by translating raw values into the standard normal scale."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "5-8b",
+      "type": "tap-choice",
+      "title": "Upper-tail percentage",
+      "context": "Same exam model: mu = 78, sigma = 10. From part (a), z = 1.4.",
+      "prompt": "Approximate P(X > 92).",
+      "options": [
+        { "id": "a", "label": "0.08", "correct": true },
+        { "id": "b", "label": "0.92" },
+        { "id": "c", "label": "0.16" },
+        { "id": "d", "label": "0.50" }
+      ],
+      "hints": [
+        "From part (a), z = 1.4.",
+        "Right-tail area above z = 1.4 is about 0.0808."
+      ],
+      "feedback": {
+        "wrong": "Use right-tail area after converting to z = 1.4."
+      },
+      "solution": {
+        "body": "P(X > 92) = P(Z > 1.4) ≈ 0.0808, about 0.08.",
+        "takeaway": "Table values become actionable percentages once you identify the right tail."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "5-8c",
+      "type": "tap-choice",
+      "title": "Sample mean probability",
+      "context": "Now take samples of n = 25 from the same population (mu = 78, sigma = 10).",
+      "prompt": "Approximate P(x-bar > 82).",
+      "options": [
+        { "id": "a", "label": "0.02", "correct": true },
+        { "id": "b", "label": "0.34" },
+        { "id": "c", "label": "0.98" },
+        { "id": "d", "label": "0.50" }
+      ],
+      "hints": [
+        "Compute SE = 10/sqrt(25) = 2, then z = (82 - 78)/2 = 2.",
+        "Right-tail area above z = 2 is about 0.0228."
+      ],
+      "feedback": {
+        "wrong": "Use the sample-mean SE and then find the right-tail z area."
+      },
+      "solution": {
+        "body": "SE = 2, z = 2, so P(x-bar > 82) = P(Z > 2) ≈ 0.0228, about 0.02.",
+        "takeaway": "Capstone thread: standardize correctly for individuals vs sample means."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "wrap-up",
+      "type": "intro",
+      "title": "Chapter 5 complete",
+      "body": "You connected normal models, z-scores, shaded areas, and sampling distributions to answer individual and sample-mean probability questions.\n\nNext up: estimation with confidence intervals, margin of error, and sample-size planning."
+    }
+  ]
+}

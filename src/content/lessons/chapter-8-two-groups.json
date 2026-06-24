@@ -1,0 +1,245 @@
+{
+  "id": "chapter-8-two-groups",
+  "title": "Chapter 8 — Comparing Two Groups",
+  "premium": true,
+  "steps": [
+    {
+      "id": "intro",
+      "type": "intro",
+      "title": "Is the difference real?",
+      "body": "Comparing two groups is everywhere: treatment vs control, version A vs version B. This chapter covers differences of means, paired vs independent designs, pooled vs separate variance, and reading a two-sample confidence interval."
+    },
+    {
+      "id": "8-1",
+      "type": "tap-choice",
+      "title": "Paired or independent?",
+      "context": "Each subject's blood pressure is measured before and after a 30-day program.",
+      "prompt": "What kind of two-sample design is this?",
+      "options": [
+        { "id": "a", "label": "Paired (dependent) samples", "correct": true },
+        { "id": "b", "label": "Independent samples" },
+        { "id": "c", "label": "A single one-sample test only" }
+      ],
+      "hints": [
+        "Are the two measurements linked to the same unit?",
+        "Before/after on the same person creates natural pairs."
+      ],
+      "feedback": {
+        "wrong": "Before/after on the same subjects is a paired design."
+      },
+      "solution": {
+        "body": "Measuring the same people twice creates paired data; analyze the within-person differences.",
+        "takeaway": "Paired designs reduce variability by comparing each unit to itself."
+      }
+    },
+    {
+      "id": "8-2",
+      "type": "tap-choice",
+      "title": "Hypotheses for two means",
+      "context": "You compare mean completion times of design A (mu1) and design B (mu2).",
+      "prompt": "What is the null hypothesis for 'no difference'?",
+      "options": [
+        { "id": "a", "label": "mu1 − mu2 = 0", "correct": true },
+        { "id": "b", "label": "mu1 − mu2 ≠ 0" },
+        { "id": "c", "label": "x-bar1 − x-bar2 = 0" }
+      ],
+      "hints": [
+        "The null states the difference of parameters is zero.",
+        "Use population means, not sample means."
+      ],
+      "feedback": {
+        "wrong": "The null sets the difference of population means to zero."
+      },
+      "solution": {
+        "body": "H0: mu1 − mu2 = 0 expresses no true difference between the groups.",
+        "takeaway": "Two-sample tests are about the difference of parameters."
+      }
+    },
+    {
+      "id": "8-3",
+      "type": "number-input",
+      "title": "Standard error of a difference",
+      "context": "Independent samples: SE1 = 3 and SE2 = 4 for the two group means.",
+      "prompt": "Compute the standard error of the difference: sqrt(SE1^2 + SE2^2).",
+      "correct": 5,
+      "tolerance": 0.05,
+      "hints": [
+        "Variances of independent estimates add.",
+        "sqrt(3^2 + 4^2) = sqrt(9 + 16)."
+      ],
+      "feedback": {
+        "wrong": "Add the squared standard errors, then take the square root."
+      },
+      "solution": {
+        "body": "SE(diff) = sqrt(9 + 16) = sqrt(25) = 5.",
+        "takeaway": "For independent groups, combine uncertainty by adding variances."
+      }
+    },
+    {
+      "id": "8-4",
+      "type": "number-input",
+      "title": "Two-sample test statistic",
+      "context": "x-bar1 = 48, x-bar2 = 40, and SE of the difference is 4.",
+      "prompt": "Compute t = (x-bar1 − x-bar2) / SE(diff).",
+      "correct": 2,
+      "tolerance": 0.05,
+      "hints": [
+        "The numerator is the observed difference.",
+        "t = (48 − 40) / 4."
+      ],
+      "feedback": {
+        "wrong": "Divide the observed difference by the SE of the difference."
+      },
+      "solution": {
+        "body": "t = (48 − 40) / 4 = 8/4 = 2.",
+        "takeaway": "The same standardize-the-estimate logic extends to differences."
+      }
+    },
+    {
+      "id": "8-5",
+      "type": "tap-choice",
+      "title": "Reading a difference CI",
+      "context": "A 95% CI for mu1 − mu2 is [1.2, 6.8].",
+      "prompt": "What can you conclude at the 5% level?",
+      "options": [
+        { "id": "a", "label": "A significant difference exists, since 0 is not in the interval", "correct": true },
+        { "id": "b", "label": "No significant difference, since the interval is positive" },
+        { "id": "c", "label": "The groups are identical" }
+      ],
+      "hints": [
+        "Check whether 0 lies inside the interval.",
+        "If 0 is excluded, the difference is significant at that level."
+      ],
+      "feedback": {
+        "wrong": "If 0 is outside the CI, the difference is statistically significant."
+      },
+      "solution": {
+        "body": "Because 0 is not in [1.2, 6.8], reject H0: there is a significant difference.",
+        "takeaway": "A difference CI that excludes 0 signals a significant difference."
+      }
+    },
+    {
+      "id": "8-6",
+      "type": "tap-choice",
+      "title": "Why pairing helps",
+      "context": "Subjects vary a lot from each other, but each person's before/after change is stable.",
+      "prompt": "What is the main statistical benefit of a paired design here?",
+      "options": [
+        { "id": "a", "label": "It removes between-subject variability, increasing power", "correct": true },
+        { "id": "b", "label": "It guarantees the null hypothesis is false" },
+        { "id": "c", "label": "It doubles the sample size automatically" }
+      ],
+      "hints": [
+        "Pairing analyzes within-subject differences.",
+        "Removing person-to-person noise sharpens the signal."
+      ],
+      "feedback": {
+        "wrong": "Pairing controls for between-subject variability, boosting power."
+      },
+      "solution": {
+        "body": "By comparing each subject to themselves, pairing cancels stable individual differences and increases power.",
+        "takeaway": "Pairing trades raw sample size for reduced noise."
+      }
+    },
+    {
+      "id": "8-7",
+      "type": "slider-prediction",
+      "title": "Build the difference estimate",
+      "context": "Group means are x-bar1 = 12.5 and x-bar2 = 9.0.",
+      "prompt": "Drag to the observed difference x-bar1 − x-bar2.",
+      "correct": 3.5,
+      "tolerance": 0.1,
+      "min": 0,
+      "max": 6,
+      "step": 0.1,
+      "initial": 0,
+      "hints": [
+        "Subtract group 2's mean from group 1's mean.",
+        "12.5 − 9.0 = ?"
+      ],
+      "feedback": {
+        "wrong": "The point estimate of the difference is x-bar1 − x-bar2."
+      },
+      "solution": {
+        "body": "x-bar1 − x-bar2 = 12.5 − 9.0 = 3.5.",
+        "takeaway": "The center of a difference CI is the observed difference of means."
+      }
+    },
+    {
+      "id": "8-8a",
+      "type": "tap-choice",
+      "title": "Capstone — choose the design",
+      "context": "An A/B test sends version A to 500 random visitors and version B to a different 500 random visitors, then measures conversion.",
+      "prompt": "Which test fits this setup?",
+      "options": [
+        { "id": "a", "label": "Independent two-sample comparison", "correct": true },
+        { "id": "b", "label": "Paired comparison" },
+        { "id": "c", "label": "One-sample test" }
+      ],
+      "hints": [
+        "Are the two groups the same people or different people?",
+        "Different random visitors means independent groups."
+      ],
+      "feedback": {
+        "wrong": "Different random users in each arm is an independent-samples design."
+      },
+      "solution": {
+        "body": "Separate random visitors per arm means the samples are independent.",
+        "takeaway": "Capstone step 1: identify whether observations are linked."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "8-8b",
+      "type": "number-input",
+      "title": "Capstone — standardized difference",
+      "context": "Observed difference in means is 6 with SE of the difference equal to 2.5.",
+      "prompt": "Compute the test statistic t for the difference.",
+      "correct": 2.4,
+      "decimalPlaces": 2,
+      "tolerance": 0.05,
+      "hints": [
+        "t = difference / SE(difference).",
+        "6 / 2.5 = ?"
+      ],
+      "feedback": {
+        "wrong": "Divide the observed difference by its standard error."
+      },
+      "solution": {
+        "body": "t = 6 / 2.5 = 2.4.",
+        "takeaway": "Capstone step 2: standardize the difference before judging significance."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "8-8c",
+      "type": "tap-choice",
+      "title": "Capstone — report the result",
+      "context": "The two-sided p-value for t = 2.4 is about 0.017, with alpha = 0.05.",
+      "prompt": "What is the conclusion?",
+      "options": [
+        { "id": "a", "label": "Reject H0: the versions differ significantly in conversion", "correct": true },
+        { "id": "b", "label": "Fail to reject H0: versions are identical" },
+        { "id": "c", "label": "Accept H0: there is exactly zero difference" }
+      ],
+      "hints": [
+        "Compare 0.017 to alpha.",
+        "Phrase the decision in A/B-test terms."
+      ],
+      "feedback": {
+        "wrong": "Since p < alpha, reject H0 and report a significant difference."
+      },
+      "solution": {
+        "body": "Because 0.017 < 0.05, reject H0: there is significant evidence the two versions convert differently.",
+        "takeaway": "Capstone flow: design, difference estimate, test statistic, then a context decision."
+      },
+      "synthesis": true
+    },
+    {
+      "id": "wrap-up",
+      "type": "intro",
+      "title": "Chapter 8 complete",
+      "body": "You can now distinguish paired from independent designs, combine standard errors for a difference, compute a two-sample statistic, and read a difference confidence interval.\n\nNext you'll handle categorical data with chi-square tests."
+    }
+  ]
+}
