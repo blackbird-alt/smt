@@ -35,6 +35,9 @@ GoogleService-Info.plist
 .agents/
 skills-lock.json
 
+# Separate local project — not part of Brillyant
+game/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
