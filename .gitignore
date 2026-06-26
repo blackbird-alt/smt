@@ -28,6 +28,9 @@ GoogleService-Info.plist
 # Firebase deploy cache
 .firebase/
 
+# Cloudflare Worker cache
+.wrangler/
+
 # Agent tooling (not part of the app)
 .agents/
 skills-lock.json

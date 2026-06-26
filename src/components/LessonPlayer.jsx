@@ -8,6 +8,7 @@ import SolutionPanel from "./SolutionPanel";
 import JokePaywall from "./JokePaywall";
 import Icon from "./Icon";
 import XpBar from "./XpBar";
+import AskForHelp from "./AskForHelp";
 import IntroStep from "./steps/IntroStep";
 import NumberInputStep from "./steps/NumberInputStep";
 import TapChoiceStep from "./steps/TapChoiceStep";
@@ -341,6 +342,9 @@ export default function LessonPlayer({
         )}
         <h2 className="step-title">{step.title}</h2>
         {renderStep()}
+        {step.type !== "intro" && (
+          <AskForHelp key={`help-${step.id}-${stepIndex}`} step={step} attempt={savedState} />
+        )}
       </section>
 
       {displayFeedback && (

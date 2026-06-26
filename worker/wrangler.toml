@@ -1,0 +1,10 @@
+name = "brillyant-ai-proxy"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Model is a plain (non-secret) variable — change it to gpt-4o, gpt-4.1, etc.
+[vars]
+OPENAI_MODEL = "gpt-4o-mini"
+
+# The OpenAI key is a SECRET, never put it here. Set it with:
+#   npx wrangler secret put OPENAI_API_KEY
