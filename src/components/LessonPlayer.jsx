@@ -63,8 +63,10 @@ export default function LessonPlayer({
   onPersistStep,
   onCompleteLesson,
   onAwardXp,
+  onRecordMistake,
 }) {
   const lesson = LESSONS[lessonId];
+  const recordedMistakesRef = useRef(new Set());
   const [stepIndex, setStepIndex] = useState(() => progress?.currentStepIndex || 0);
   const [feedback, setFeedback] = useState(null);
   const [restarting, setRestarting] = useState(false);
@@ -218,6 +220,21 @@ export default function LessonPlayer({
 
   function savePartial(state) {
     if (reviewMode) return;
+
+    // A submitted-but-incorrect check flows through here for the gradeable step
+    // types. Log it once per step so the daily review can target weak spots.
+    if (
+      onRecordMistake &&
+      step?.id &&
+      state?.submitted &&
+      state.result &&
+      state.result.correct === false &&
+      !recordedMistakesRef.current.has(step.id)
+    ) {
+      recordedMistakesRef.current.add(step.id);
+      onRecordMistake(step.id);
+    }
+
     persistPartial(stepIndex, state);
   }
 
@@ -343,7 +360,12 @@ export default function LessonPlayer({
         <h2 className="step-title">{step.title}</h2>
         {renderStep()}
         {step.type !== "intro" && (
-          <AskForHelp key={`help-${step.id}-${stepIndex}`} step={step} attempt={savedState} />
+          <AskForHelp
+            key={`help-${step.id}-${stepIndex}`}
+            step={step}
+            attempt={savedState}
+            lessonId={lesson.id}
+          />
         )}
       </section>
 

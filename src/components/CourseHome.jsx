@@ -40,6 +40,8 @@ export default function CourseHome({
   onStartLesson,
   onOpenProfile,
   onOpenLeaderboard,
+  onPracticeMistakes,
+  hasMistakes = false,
 }) {
   const [premiumOpen, setPremiumOpen] = useState(false);
   const glyphRefs = useRef([]);
@@ -224,6 +226,19 @@ export default function CourseHome({
           </div>
         </div>
       </section>
+
+      {hasMistakes && (
+        <section className="practice-mistakes-row">
+          <button
+            type="button"
+            className="btn btn-primary btn-icon-text"
+            onClick={onPracticeMistakes}
+          >
+            <Icon name="sparkles" size={18} />
+            Practice your mistakes
+          </button>
+        </section>
+      )}
 
       {nextLesson && (
         <section className="next-card">

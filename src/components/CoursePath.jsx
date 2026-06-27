@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { isLessonInProgress } from "../lib/progress";
 import {
   getLessonProgressPercent,
@@ -71,8 +71,6 @@ function ProgressRing({ percent, status }) {
 }
 
 export default function CoursePath({ lessons, lessonProgress, onStartLesson, onPremium }) {
-  const activeRef = useRef(null);
-
   const items = useMemo(() => {
     let currentIndex = lessons.findIndex((lesson) => {
       const status = statusFor(lesson, lessonProgress[lesson.id]);
@@ -91,15 +89,6 @@ export default function CoursePath({ lessons, lessonProgress, onStartLesson, onP
       };
     });
   }, [lessons, lessonProgress]);
-
-  useEffect(() => {
-    const node = activeRef.current;
-    if (!node) return;
-    const t = setTimeout(() => {
-      node.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 350);
-    return () => clearTimeout(t);
-  }, []);
 
   function handleSelect(item) {
     if (item.status === "premium") {
@@ -122,7 +111,6 @@ export default function CoursePath({ lessons, lessonProgress, onStartLesson, onP
           <li
             key={lesson.id}
             className={`path-row path-row-${status} ${item.isCurrent ? "path-row-current" : ""}`}
-            ref={item.isCurrent ? activeRef : null}
           >
             <div className="path-rail" aria-hidden="true">
               <span className="path-line" />

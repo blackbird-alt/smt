@@ -1,0 +1,131 @@
+BRAINLIFT: BRILLYANT, LEARN-BY-DOING PROBABILITY & STATISTICS
+
+OWNERS
+[Your name]
+
+
+PURPOSE
+
+Figure out where AI actually helps a learner and where it gets in the way, so that the
+interactive practice teaches the subject on its own and AI only makes it better. My
+working belief: the big wins come from learning science and from feeding the AI the
+lesson's real data, not from a bigger model or a chatbot.
+
+In Scope: teaching one subject deeply through hands-on, instantly graded problems;
+deciding which AI features earn their place; the learning-science ideas that make
+practice stick.
+
+Out of Scope: a general chatbot that answers anything; letting the model decide if an
+answer is right; covering many subjects shallowly.
+
+
+DOK 4: SPIKY POINTS OF VIEW
+
+SPOV 1: A chatbot tutor is the wrong first AI feature.
+Clicking the right multiple-choice option feels like progress, but that's recognition,
+not learning. What sticks is having to pull an idea out of your own head and getting
+corrected when you miss. So the smarter use of AI is a review that builds new problems
+out of the ones you already got wrong, not a bot sitting there waiting for you to ask
+it something. And those problems have to be actually new. If it's the same question
+with the numbers swapped, the student just memorizes the answer.
+
+SPOV 2: A bigger model won't fix a bad tutor. Better context will.
+My tutor was useless until I stopped handing it the page text and started handing it
+the real problem data and the known answer (flagged as private), plus chapter notes I
+had researched. Same model, completely different quality. Most "we need a smarter
+model" conversations are really "we never gave the model the right context"
+conversations.
+
+SPOV 3: AI can finally give every kid a private tutor, and that should scare textbook publishers.
+Bloom showed in 1984 that a student with a one-on-one tutor ends up near the top 2% of
+a normal class. We have known the answer for forty years and ignored it, because you
+cannot hire a tutor for every child. AI can. It can give each learner a patient tutor
+that keeps inventing the exact next problem they need and never runs out. Once that
+works, a fixed textbook with the same 30 problems for everyone looks silly. I built a
+small version of it in a week by myself, which tells you where this is headed.
+
+
+EXPERTS
+
+Robert Bjork (UCLA). "Desirable difficulties": spacing, interleaving, and retrieval
+feel harder but teach more. Backs the mistake-driven, spaced review.
+https://bjorklab.psych.ucla.edu/
+
+Roediger and Karpicke (WashU, Purdue). The testing effect: recalling beats rereading.
+Why I favor active recall and resurfacing missed items. Roediger and Karpicke (2006),
+Psychological Science.
+
+John Sweller (UNSW). Cognitive Load Theory and the worked-example effect: novices
+learn well from fully worked examples. Why the tutor solves its own examples and the
+screens stay uncluttered. Sweller (1988), Cognitive Science.
+
+Benjamin Bloom and Kurt VanLehn. One-to-one mastery tutoring beats group teaching by a
+lot (the 2 sigma result), and good software tutors get close. The bar for
+personalization. Bloom (1984), Educational Researcher; VanLehn (2011).
+
+
+DOK 3: INSIGHTS
+
+- Resurfacing wrong answers is the cheapest big win. It is retrieval practice, spacing,
+  and error review all at once, with almost no UI.
+- Regenerated problems have to be new scenarios, not renumbered copies, or you train
+  memorizing an answer instead of the skill.
+- "Lesson as data, not HTML" is the keystone. Typed steps are what give instant grading
+  and also what give the AI real state to ground on.
+- Grade with code, never the model. Deterministic grading plus checking the AI's output
+  is what makes it safe to put in front of a learner.
+
+
+DOK 2: KNOWLEDGE TREE
+
+Retrieval practice
+  Roediger and Karpicke (2006), Psychological Science.
+  Facts: tested students recalled far more on a one-week-later test than students who
+  restudied; the gap grew with time; restudying raised confidence but not retention.
+  Summary: testing is a learning event, not just a measurement. Favor recall and reuse
+  of missed items.
+  https://journals.sagepub.com/doi/10.1111/j.1467-9280.2006.01693.x
+
+Spacing and interleaving
+  Rohrer and Taylor (2007), Instructional Science.
+  Facts: students who interleaved problem types scored about 63% vs 20% on a delayed
+  test; it felt harder during practice; the gain is learning to pick the right method.
+  Summary: mix problem types in review instead of blocking them.
+  https://doi.org/10.1007/s11251-007-9015-8
+
+Cognitive load
+  Sweller (1988), Cognitive Science.
+  Facts: working memory is limited; worked examples often beat unguided problem solving
+  for novices; visual clutter competes with learning.
+  Summary: give novices a worked example and keep the interface clean.
+  https://onlinelibrary.wiley.com/doi/10.1207/s15516709cog1202_4
+
+Tutoring and mastery
+  Bloom (1984), Educational Researcher.
+  Facts: one-to-one mastery tutoring moved the average student to about the 98th
+  percentile (two standard deviations), using feedback-and-correct cycles.
+  Summary: personalized mastery is the goal; immediate feedback and targeted practice
+  are the scalable parts.
+  https://doi.org/10.3102/0013189X013006004
+
+Learn-by-doing
+  Freeman et al. (2014), PNAS.
+  Facts: across 225 studies, active learning raised exam scores about 6% and cut
+  failure rates from 34% to 22% versus lecture.
+  Summary: doing beats watching. Build the interactive MVP first, add AI later.
+  https://doi.org/10.1073/pnas.1319030111
+
+
+APPENDIX: BUILD-PROCESS NOTES (required by the brief)
+1. Tools: built in Cursor with Claude as an agent; deployed on Firebase Hosting; used
+   10 parallel research subagents (one per chapter) and debugged AI by logging the real
+   error in the Cloudflare Worker.
+2. Prompts that worked: scope a change as a pivot; ground the tutor in structured state
+   plus a "reference only" answer; strict output schema for the research agents; loosen
+   the tutor with clear boundaries; make the system report its own error.
+3. Phase 2: shipped a Socratic help tutor and an AI review built from mistakes; skipped
+   a generic chatbot, AI-written lessons, and AI grading.
+4. Code: roughly 90% agent-written, 10% hand-done (the decisions, secrets, content
+   review, testing).
+5. Learnings: grounding beats prompting; the model never decides correctness; the app
+   must teach with AI off; make failures visible; subagents are a research team.

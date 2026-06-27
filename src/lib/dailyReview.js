@@ -41,6 +41,40 @@ function shuffle(items) {
   return copy;
 }
 
+// Turn the user's recorded mistakes (a map on their profile) into source
+// problems the AI can model fresh practice on. Most-recently-missed first; each
+// entry is resolved to its full lesson step so the AI has the concept + answer.
+export function collectMistakeSources(profile, max = 6) {
+  const map = profile?.mistakes;
+  if (!map || typeof map !== "object") return [];
+
+  const entries = Object.values(map)
+    .filter((m) => m && m.lessonId && m.stepId != null)
+    .sort((a, b) => String(b.lastMissed).localeCompare(String(a.lastMissed)));
+
+  const sources = [];
+  for (const entry of entries) {
+    const chapter = LESSONS_BY_ID[entry.lessonId];
+    if (!chapter) continue;
+    const step = (chapter.steps || []).find((s) => String(s.id) === String(entry.stepId));
+    if (!step || !step.prompt) continue;
+    sources.push({
+      lessonId: entry.lessonId,
+      lessonTitle: chapter.title,
+      type: step.type,
+      title: step.title,
+      context: step.context,
+      prompt: step.prompt,
+      options: step.options,
+      correct: step.correct,
+      solution: step.solution,
+      count: entry.count || 1,
+    });
+    if (sources.length >= max) break;
+  }
+  return sources;
+}
+
 // Gather review problems only from sections the learner has completed. Takes a
 // couple from each (shuffled) so the set spans their done chapters, then caps
 // the total. Each problem is tagged with its source lesson.

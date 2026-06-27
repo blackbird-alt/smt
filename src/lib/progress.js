@@ -231,6 +231,41 @@ export async function resetLessonProgress(uid, lessonId) {
   });
 }
 
+// Remember problems the learner answered incorrectly so the daily review can
+// generate fresh, similar practice targeting their weak spots. Stored as a
+// capped map on the user doc keyed by "lessonId::stepId" (dedup + count).
+const MAX_TRACKED_MISTAKES = 40;
+
+export async function recordMistake(uid, lessonId, stepId) {
+  if (!uid || !lessonId || stepId == null) return;
+  const ref = userRef(uid);
+  const snapshot = await getDoc(ref);
+  const data = snapshot.exists() ? snapshot.data() : {};
+  const mistakes = { ...(data.mistakes || {}) };
+
+  const key = `${lessonId}::${stepId}`;
+  const prev = mistakes[key];
+  mistakes[key] = {
+    lessonId,
+    stepId: String(stepId),
+    count: (prev?.count || 0) + 1,
+    lastMissed: new Date().toISOString(),
+  };
+
+  // Cap the map: keep only the most recently missed problems.
+  const keys = Object.keys(mistakes);
+  if (keys.length > MAX_TRACKED_MISTAKES) {
+    keys
+      .sort((a, b) =>
+        String(mistakes[b].lastMissed).localeCompare(String(mistakes[a].lastMissed)),
+      )
+      .slice(MAX_TRACKED_MISTAKES)
+      .forEach((stale) => delete mistakes[stale]);
+  }
+
+  await setDoc(ref, { mistakes, updatedAt: serverTimestamp() }, { merge: true });
+}
+
 export async function recordReviewShown(uid, dateKey) {
   await setDoc(
     userRef(uid),

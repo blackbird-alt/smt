@@ -88,13 +88,15 @@ export default {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${env.OPENAI_API_KEY}`,
+          Authorization: `Bearer ${(env.OPENAI_API_KEY || "").trim()}`,
         },
         body: JSON.stringify({
           model: env.OPENAI_MODEL || "gpt-4o-mini",
           messages,
           temperature: 0.4,
-          max_tokens: 400,
+          // High enough for a batch of generated review problems with full
+          // worked solutions; short tutor replies stay short regardless.
+          max_tokens: 2000,
         }),
       });
     } catch {
@@ -102,12 +104,55 @@ export default {
     }
 
     if (!upstream.ok) {
-      const detail = (await upstream.text()).slice(0, 500);
-      return json({ error: "AI service error", detail }, 502, cors);
+      const raw = await upstream.text();
+      const detail = raw.slice(0, 600);
+      console.log(
+        "OpenAI upstream error",
+        upstream.status,
+        upstream.statusText,
+        "bodyLen=" + raw.length,
+        "keyLen=" + (env.OPENAI_API_KEY || "").trim().length,
+        "model=" + (env.OPENAI_MODEL || "gpt-4o-mini"),
+        JSON.stringify(detail),
+      );
+      return json(
+        { error: "AI service error", status: upstream.status, detail },
+        502,
+        cors,
+      );
     }
 
     const data = await upstream.json();
     const text = data.choices?.[0]?.message?.content || "";
+
+    // Log token usage and an estimated dollar cost so spend is visible in
+    // `wrangler tail`. OpenAI returns a `usage` object on every completion.
+    const model = env.OPENAI_MODEL || "gpt-4o-mini";
+    const usage = data.usage || {};
+    const promptTokens = usage.prompt_tokens || 0;
+    const completionTokens = usage.completion_tokens || 0;
+    const cost = estimateCostUsd(model, promptTokens, completionTokens);
+    console.log(
+      "OpenAI ok",
+      "model=" + model,
+      "prompt=" + promptTokens,
+      "completion=" + completionTokens,
+      "total=" + (usage.total_tokens || promptTokens + completionTokens),
+      "cost=$" + cost.toFixed(6),
+    );
+
     return json({ text }, 200, cors);
   },
 };
+
+// USD per 1M tokens (input, output). Extend as you change models.
+const PRICING = {
+  "gpt-4o-mini": { in: 0.15, out: 0.6 },
+  "gpt-4o": { in: 2.5, out: 10 },
+  "gpt-4.1-mini": { in: 0.4, out: 1.6 },
+};
+
+function estimateCostUsd(model, promptTokens, completionTokens) {
+  const price = PRICING[model] || PRICING["gpt-4o-mini"];
+  return (promptTokens * price.in + completionTokens * price.out) / 1_000_000;
+}

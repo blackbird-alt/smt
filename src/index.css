@@ -629,6 +629,14 @@ input {
   box-shadow: var(--shadow-card);
 }
 
+.practice-mistakes-row {
+  margin-bottom: 1.5rem;
+}
+
+.practice-mistakes-row .btn {
+  width: 100%;
+}
+
 .stat-card {
   padding: 1rem;
 }

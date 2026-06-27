@@ -8,7 +8,7 @@ const QUICK_PROMPTS = [
   "Why might my answer be wrong?",
 ];
 
-export default function AskForHelp({ step, attempt }) {
+export default function AskForHelp({ step, attempt, lessonId }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -34,11 +34,19 @@ export default function AskForHelp({ step, attempt }) {
     setMessages((current) => [...current, { role: "user", text }]);
     setBusy(true);
     try {
-      const reply = await requestHelp({ step, attempt, history, question: text });
+      const reply = await requestHelp({
+        step,
+        attempt,
+        history,
+        question: text,
+        lessonId,
+      });
       setMessages((current) => [...current, { role: "model", text: reply }]);
-    } catch {
+    } catch (err) {
       setError(
-        "The AI helper isn't available right now — try the hints below, or ask again in a moment.",
+        err?.message
+          ? `Couldn't get help: ${err.message}`
+          : "The AI helper isn't available right now — try the hints below.",
       );
     } finally {
       setBusy(false);

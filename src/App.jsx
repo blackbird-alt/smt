@@ -3,11 +3,13 @@ import { useAuth } from "./hooks/useAuth";
 import { useProgress } from "./hooks/useProgress";
 import { signOutUser } from "./lib/auth";
 import {
+  collectMistakeSources,
   collectReviewProblems,
   shouldShowDailyReview,
   todayKey,
 } from "./lib/dailyReview";
-import { recordReviewShown } from "./lib/progress";
+import { recordMistake, recordReviewShown } from "./lib/progress";
+import { isAiHelpEnabled } from "./lib/ai";
 import Login from "./components/Login";
 import CourseHome from "./components/CourseHome";
 
@@ -65,6 +67,8 @@ function AuthedApp({ user, refreshUser }) {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewProblems, setReviewProblems] = useState([]);
+  const [reviewSources, setReviewSources] = useState([]);
+  const [reviewCount, setReviewCount] = useState(5);
   const reviewDecidedRef = useRef(false);
 
   // Once per day, starting on the learner's second day, surface a review of
@@ -85,11 +89,14 @@ function AuthedApp({ user, refreshUser }) {
     let cancelled = false;
     (async () => {
       const problems = collectReviewProblems(completedIds);
-      if (problems.length === 0) return;
+      const sources = collectMistakeSources(profile);
+      if (problems.length === 0 && sources.length === 0) return;
       await recordReviewShown(user.uid, todayKey());
       await refreshProfile();
       if (cancelled) return;
       setReviewProblems(problems);
+      setReviewSources(sources);
+      setReviewCount(5);
       setReviewOpen(true);
     })();
     return () => {
@@ -143,6 +150,21 @@ function AuthedApp({ user, refreshUser }) {
     setReviewMode(false);
   }, []);
 
+  // Manual, on-demand practice of problems similar to ones the learner has
+  // missed. Deliberately does NOT call recordReviewShown — this is separate
+  // from the once-daily auto review and must not consume/suppress it.
+  const openMistakePractice = useCallback(() => {
+    const completedIds = Object.keys(lessonProgress).filter(
+      (id) => lessonProgress[id]?.completed,
+    );
+    setReviewSources(collectMistakeSources(profile, 10));
+    setReviewProblems(collectReviewProblems(completedIds));
+    setReviewCount(10);
+    setReviewOpen(true);
+  }, [lessonProgress, profile]);
+
+  const hasMistakes = collectMistakeSources(profile).length > 0;
+
   if (progressLoading) {
     return <LoadingScreen />;
   }
@@ -151,7 +173,10 @@ function AuthedApp({ user, refreshUser }) {
     return (
       <Suspense fallback={<LoadingScreen />}>
         <DailyReview
-          problems={reviewProblems}
+          sources={reviewSources}
+          fallbackProblems={reviewProblems}
+          aiEnabled={isAiHelpEnabled()}
+          count={reviewCount}
           onAwardXp={grantXp}
           onClose={() => setReviewOpen(false)}
         />
@@ -201,6 +226,9 @@ function AuthedApp({ user, refreshUser }) {
           closeLesson();
         }}
         onAwardXp={grantXp}
+        onRecordMistake={(stepId) => {
+          void recordMistake(user.uid, activeLessonId, stepId);
+        }}
       />
       </Suspense>
     );
@@ -237,6 +265,8 @@ function AuthedApp({ user, refreshUser }) {
       onStartLesson={openLesson}
       onOpenProfile={() => setShowProfile(true)}
       onOpenLeaderboard={() => setShowLeaderboard(true)}
+      onPracticeMistakes={openMistakePractice}
+      hasMistakes={hasMistakes}
     />
   );
 }
