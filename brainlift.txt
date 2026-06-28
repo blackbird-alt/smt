@@ -3,7 +3,7 @@ BRAINLIFT: BRILLYANT, LEARN-BY-DOING PROBABILITY & STATISTICS
 Structured context and the views I formed building Brillyant, an interactive
 Probability & Statistics course modeled on Brilliant. Live: https://stuff-18453.web.app
 
-OWNERS: [Your name]
+OWNERS: Ellie Zhang
 
 PURPOSE
 Decide where AI helps a learner and where it gets in the way, so the interactive
