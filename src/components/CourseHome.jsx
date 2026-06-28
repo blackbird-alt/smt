@@ -7,12 +7,16 @@ import {
 } from "../lib/account";
 import { isLessonInProgress } from "../lib/progress";
 import { isLessonAvailable } from "../content/lessons";
+import { computeAllMastery } from "../lib/mastery";
 import LessonProgressBar from "./LessonProgressBar";
 import UserAvatar from "./UserAvatar";
 import CoursePath from "./CoursePath";
 import Icon from "./Icon";
 import ThemeToggle from "./ThemeToggle";
 import JokePaywall from "./JokePaywall";
+import Quests from "./Quests";
+import { MascotGreeter } from "./Mascot";
+import { computeAchievements } from "../lib/achievements";
 
 // Scattered across the whole viewport; each drifts gently and is pushed away
 // from the cursor (see the repel effect below).
@@ -40,6 +44,8 @@ export default function CourseHome({
   onStartLesson,
   onOpenProfile,
   onOpenLeaderboard,
+  onOpenInsights,
+  onOpenAchievements,
   onPracticeMistakes,
   hasMistakes = false,
 }) {
@@ -130,6 +136,39 @@ export default function CourseHome({
   const photoURL = getProfilePhotoUrl(user, profile);
   const avatar = getProfileAvatar(profile);
 
+  // Soft, never-blocking nudge: surface the earliest chapter the learner has
+  // finished but not yet mastered, inviting (not forcing) a review.
+  const masteryNudge = computeAllMastery(lessonProgress, profile).find(
+    (m) => m.status === "review",
+  );
+
+  const { earnedCount, total: badgeTotal } = computeAchievements(
+    profile,
+    lessonProgress,
+  );
+
+  // Sig's greeting reacts to where the learner is — and keeps quietly selling the
+  // learning science (do, recall, come back) rather than promising it'll be easy.
+  const streak = profile?.streak || 0;
+  const mascotMood = streak >= 3 || completedCount > 0 ? "happy" : "wave";
+  const greeting = (() => {
+    if (completedCount === 0) {
+      return "Hi, I'm Sig! We learn stats by doing and recalling — not memorizing. Tap a chapter and let's dig in.";
+    }
+    if (streak >= 3) {
+      return `${streak}-day streak! Spacing it out like this is exactly how it sticks. Let's keep going.`;
+    }
+    if (masteryNudge) {
+      return "Welcome back! A quick review of an unfinished topic is the fastest way to lock it in.";
+    }
+    return "Welcome back! Pulling answers from memory beats rereading — ready for a few?";
+  })();
+
+  function nudgeTitle(title) {
+    const dash = title.indexOf("—");
+    return dash >= 0 ? title.slice(dash + 1).trim() : title;
+  }
+
   function lessonButtonLabel(lessonId) {
     const progress = lessonProgress[lessonId];
     if (progress?.completed) return "Review chapter";
@@ -176,6 +215,15 @@ export default function CourseHome({
           <button
             type="button"
             className="icon-btn"
+            onClick={onOpenAchievements}
+            aria-label="Open trophy case"
+            title="Trophy case"
+          >
+            <Icon name="award" size={18} />
+          </button>
+          <button
+            type="button"
+            className="icon-btn"
             onClick={onOpenLeaderboard}
             aria-label="Open leaderboard"
             title="Leaderboard"
@@ -194,6 +242,8 @@ export default function CourseHome({
           </button>
         </div>
       </header>
+
+      <MascotGreeter mood={mascotMood} message={greeting} />
 
       <section className="stats-row">
         <div className="stat-card">
@@ -227,8 +277,10 @@ export default function CourseHome({
         </div>
       </section>
 
-      {hasMistakes && (
-        <section className="practice-mistakes-row">
+      <Quests profile={profile} />
+
+      <section className="home-actions-row">
+        {hasMistakes && (
           <button
             type="button"
             className="btn btn-primary btn-icon-text"
@@ -237,6 +289,35 @@ export default function CourseHome({
             <Icon name="sparkles" size={18} />
             Practice your mistakes
           </button>
+        )}
+        <button
+          type="button"
+          className="btn btn-secondary btn-icon-text"
+          onClick={onOpenInsights}
+        >
+          <Icon name="trending-up" size={18} />
+          Your progress
+        </button>
+      </section>
+
+      {masteryNudge && (
+        <section className="mastery-nudge" role="note">
+          <span className="mastery-nudge-icon" aria-hidden="true">
+            <Icon name="target" size={18} />
+          </span>
+          <div className="mastery-nudge-body">
+            <p className="mastery-nudge-text">
+              You finished <strong>{nudgeTitle(masteryNudge.title)}</strong> but
+              haven&apos;t mastered it yet — a quick review will lock it in.
+            </p>
+            <button
+              type="button"
+              className="btn-text btn-icon-text mastery-nudge-btn"
+              onClick={() => onStartLesson(masteryNudge.lessonId)}
+            >
+              <Icon name="refresh" size={16} /> Review to master
+            </button>
+          </div>
         </section>
       )}
 

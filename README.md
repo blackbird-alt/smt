@@ -91,11 +91,21 @@ Chapters are JSON arrays of typed steps — not HTML blobs. Each step has a `typ
 Firestore schema:
 
 ```
-users/{uid}                     → displayName, email, xp, streak, lastActiveDate, milestones
+users/{uid}                     → displayName, email, xp, streak, lastActiveDate, milestones,
+                                  mistakes (map), reviewCorrect, reviewAttempts, reviewSessions
 users/{uid}/progress/{lessonId} → currentStepIndex, stepStates, completed
 ```
 
 Learners resume mid-chapter; finishing a problem saves forward progress immediately, and XP is awarded once per problem (no farming by re-answering).
+
+### Learning science (Phase 3)
+
+Three evidence-based study habits are baked into the review experience — all of them work with AI turned off:
+
+- **Interleaving** — review sessions mix problems from different chapters instead of grouping them. `interleaveByKey()` round-robins the pool by `lessonId` so consecutive problems pull from different skills, which improves long-term retention versus blocked practice. This applies to both the static review set and the order in which mistakes seed AI-generated practice.
+- **Per-chapter mastery signal** — `src/lib/mastery.js` computes a mastery percent for each completed chapter: `round(100 × (gradedSteps − missed) ÷ gradedSteps)`, where graded steps exclude the `intro` and open-ended sandbox step types (which have no single right answer) and `missed` is the count of distinct tracked mistakes for that chapter. A chapter is **mastered** at ≥ 80%.
+- **Soft "review to master" recommendation** — when a chapter is finished but not yet mastered, the dashboard shows a gentle, dismissible nudge to review it. It **never blocks or locks** progress; learners can always move on.
+- **Insights panel** ("Your progress") — surfaces per-chapter mastery bars, overall **review accuracy** (`reviewCorrect ÷ reviewAttempts`, tracked via `recordReviewResult`), outstanding items to review, streak, and XP/level, plus one-tap review buttons for any chapter worth a second pass.
 
 ## Deploy
 

@@ -41,6 +41,32 @@ function shuffle(items) {
   return copy;
 }
 
+// Interleaving (mixing skills/chapters) beats blocking (one chapter at a time)
+// for long-term retention. Round-robin items by key so consecutive problems
+// come from different chapters as much as possible — when one chapter has more
+// items than the others, its extras naturally trail at the end.
+export function interleaveByKey(items, keyFn) {
+  const buckets = new Map();
+  for (const item of items) {
+    const key = keyFn(item);
+    if (!buckets.has(key)) buckets.set(key, []);
+    buckets.get(key).push(item);
+  }
+
+  const queues = [...buckets.values()];
+  const result = [];
+  let remaining = items.length;
+  while (remaining > 0) {
+    for (const queue of queues) {
+      if (queue.length > 0) {
+        result.push(queue.shift());
+        remaining -= 1;
+      }
+    }
+  }
+  return result;
+}
+
 // Turn the user's recorded mistakes (a map on their profile) into source
 // problems the AI can model fresh practice on. Most-recently-missed first; each
 // entry is resolved to its full lesson step so the AI has the concept + answer.
@@ -72,7 +98,9 @@ export function collectMistakeSources(profile, max = 6) {
     });
     if (sources.length >= max) break;
   }
-  return sources;
+  // Seed AI generation in an interleaved order so fresh problems alternate
+  // between the chapters/skills the learner has struggled with.
+  return interleaveByKey(sources, (s) => s.lessonId);
 }
 
 // Gather review problems only from sections the learner has completed. Takes a
@@ -89,5 +117,6 @@ export function collectReviewProblems(completedLessonIds, max = 5, perChapter = 
       pool.push({ ...problem, lessonId, lessonTitle: chapter.title });
     }
   }
-  return shuffle(pool).slice(0, max);
+  // Interleave by chapter (rather than grouping) so the review mixes skills.
+  return interleaveByKey(shuffle(pool), (p) => p.lessonId).slice(0, max);
 }

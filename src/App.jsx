@@ -8,7 +8,11 @@ import {
   shouldShowDailyReview,
   todayKey,
 } from "./lib/dailyReview";
-import { recordMistake, recordReviewShown } from "./lib/progress";
+import {
+  recordMistake,
+  recordReviewResult,
+  recordReviewShown,
+} from "./lib/progress";
 import { isAiHelpEnabled } from "./lib/ai";
 import Login from "./components/Login";
 import CourseHome from "./components/CourseHome";
@@ -21,6 +25,8 @@ const LessonPlayer = lazy(() => import("./components/LessonPlayer"));
 const Profile = lazy(() => import("./components/Profile"));
 const Leaderboard = lazy(() => import("./components/Leaderboard"));
 const DailyReview = lazy(() => import("./components/DailyReview"));
+const Insights = lazy(() => import("./components/Insights"));
+const Achievements = lazy(() => import("./components/Achievements"));
 
 function LoadingScreen() {
   return (
@@ -65,6 +71,8 @@ function AuthedApp({ user, refreshUser }) {
   const [reviewMode, setReviewMode] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [showInsights, setShowInsights] = useState(false);
+  const [showAchievements, setShowAchievements] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewProblems, setReviewProblems] = useState([]);
   const [reviewSources, setReviewSources] = useState([]);
@@ -178,6 +186,10 @@ function AuthedApp({ user, refreshUser }) {
           aiEnabled={isAiHelpEnabled()}
           count={reviewCount}
           onAwardXp={grantXp}
+          onReviewComplete={async ({ correct, total }) => {
+            await recordReviewResult(user.uid, correct, total);
+            await refreshProfile();
+          }}
           onClose={() => setReviewOpen(false)}
         />
       </Suspense>
@@ -257,6 +269,34 @@ function AuthedApp({ user, refreshUser }) {
     );
   }
 
+  if (showInsights) {
+    return (
+      <Suspense fallback={<LoadingScreen />}>
+        <Insights
+          profile={profile}
+          lessonProgress={lessonProgress}
+          onBack={() => setShowInsights(false)}
+          onReviewChapter={(id) => {
+            setShowInsights(false);
+            openLesson(id);
+          }}
+        />
+      </Suspense>
+    );
+  }
+
+  if (showAchievements) {
+    return (
+      <Suspense fallback={<LoadingScreen />}>
+        <Achievements
+          profile={profile}
+          lessonProgress={lessonProgress}
+          onBack={() => setShowAchievements(false)}
+        />
+      </Suspense>
+    );
+  }
+
   return (
     <CourseHome
       profile={profile}
@@ -265,6 +305,8 @@ function AuthedApp({ user, refreshUser }) {
       onStartLesson={openLesson}
       onOpenProfile={() => setShowProfile(true)}
       onOpenLeaderboard={() => setShowLeaderboard(true)}
+      onOpenInsights={() => setShowInsights(true)}
+      onOpenAchievements={() => setShowAchievements(true)}
       onPracticeMistakes={openMistakePractice}
       hasMistakes={hasMistakes}
     />

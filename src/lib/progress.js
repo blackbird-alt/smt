@@ -3,6 +3,7 @@ import {
   getDoc,
   setDoc,
   serverTimestamp,
+  increment,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { deriveUsername, writePublicProfile } from "./social";
@@ -167,18 +168,35 @@ export async function awardXp(uid, amount) {
   }
 
   const nextXp = (profile.xp || 0) + amount;
+  const nextDaily = bumpDaily(profile.daily, today, { correct: 1, xp: amount });
   await setDoc(
     userRef(uid),
     {
       xp: nextXp,
       streak,
       lastActiveDate: today,
+      daily: nextDaily,
       updatedAt: serverTimestamp(),
     },
     { merge: true },
   );
 
   await writePublicProfile(uid, { xp: nextXp, streak });
+}
+
+// Roll the per-day quest counters forward. Resets to zero when the stored day
+// isn't today, so daily quests start fresh each morning.
+function bumpDaily(daily, today, { correct = 0, xp = 0, reviewed = false } = {}) {
+  const base =
+    daily && daily.date === today
+      ? daily
+      : { date: today, correct: 0, xp: 0, reviewed: false };
+  return {
+    date: today,
+    correct: (base.correct || 0) + correct,
+    xp: (base.xp || 0) + xp,
+    reviewed: Boolean(base.reviewed) || reviewed,
+  };
 }
 
 export async function recordLessonCompletion(uid, lessonId, stepStates) {
@@ -264,6 +282,29 @@ export async function recordMistake(uid, lessonId, stepId) {
   }
 
   await setDoc(ref, { mistakes, updatedAt: serverTimestamp() }, { merge: true });
+}
+
+// Aggregate review accuracy on the user doc so the Insights panel can show how
+// well daily/mistake reviews are going. Stored as running totals; one session
+// per call. Uses FieldValue increment so concurrent reviews don't clobber.
+export async function recordReviewResult(uid, correct, total) {
+  if (!uid || !total) return;
+  const snapshot = await getDoc(userRef(uid));
+  const profile = snapshot.exists() ? snapshot.data() : {};
+  const today = todayKey();
+  const nextDaily = bumpDaily(profile.daily, today, { reviewed: true });
+  await setDoc(
+    userRef(uid),
+    {
+      reviewCorrect: increment(correct || 0),
+      reviewAttempts: increment(total || 0),
+      reviewSessions: increment(1),
+      daily: nextDaily,
+      lastReviewResultAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true },
+  );
 }
 
 export async function recordReviewShown(uid, dateKey) {

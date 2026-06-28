@@ -8,6 +8,7 @@ import SolutionPanel from "./SolutionPanel";
 import JokePaywall from "./JokePaywall";
 import Icon from "./Icon";
 import XpBar from "./XpBar";
+import Mascot from "./Mascot";
 import AskForHelp from "./AskForHelp";
 import IntroStep from "./steps/IntroStep";
 import NumberInputStep from "./steps/NumberInputStep";
@@ -69,6 +70,7 @@ export default function LessonPlayer({
   const recordedMistakesRef = useRef(new Set());
   const [stepIndex, setStepIndex] = useState(() => progress?.currentStepIndex || 0);
   const [feedback, setFeedback] = useState(null);
+  const [mascotMood, setMascotMood] = useState("idle");
   const [restarting, setRestarting] = useState(false);
   const paywallEnabled = Boolean(lesson?.paywallHalfway);
   const paywallTrigger = Math.floor((lesson?.steps?.length || 0) / 2);
@@ -100,6 +102,7 @@ export default function LessonPlayer({
   // the previous step or a review solution left the scroll position.
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    setMascotMood("idle");
   }, [stepIndex]);
 
   // Only auto-scroll to feedback when it appears from a live answer (not when a
@@ -154,12 +157,14 @@ export default function LessonPlayer({
 
     if (state?.result?.correct && step.solution) {
       const xp = alreadySolved ? 0 : problemXp(step);
+      setMascotMood("celebrate");
       setFeedback({ correct: true, showSolution: true, xp });
       void persistInBackground(xp);
       return;
     }
 
     if (message) {
+      setMascotMood("celebrate");
       setFeedback({ correct: true, message });
       void persistInBackground(0);
       return;
@@ -233,6 +238,12 @@ export default function LessonPlayer({
     ) {
       recordedMistakesRef.current.add(step.id);
       onRecordMistake(step.id);
+    }
+
+    // React to a wrong submission with an encouraging mood (the step itself
+    // shows the hand-written feedback + hints). Mistakes are part of learning.
+    if (state?.submitted && state.result && state.result.correct === false) {
+      setMascotMood("oops");
     }
 
     persistPartial(stepIndex, state);
@@ -335,11 +346,26 @@ export default function LessonPlayer({
           </button>
         </div>
         <div className="lesson-meta">
-          <h1>{lesson.title}</h1>
-          <p>
-            {reviewMode ? "Review · " : ""}
-            Page {stepIndex + 1} of {lesson.steps.length}
-          </p>
+          <div className="lesson-meta-text">
+            <h1>{lesson.title}</h1>
+            <p>
+              {reviewMode ? "Review · " : ""}
+              Page {stepIndex + 1} of {lesson.steps.length}
+            </p>
+          </div>
+          {!reviewMode && (
+            <div className={`lesson-mascot lesson-mascot-${mascotMood}`}>
+              <Mascot mood={mascotMood} size={56} />
+              {mascotMood === "celebrate" && (
+                <span className="lesson-mascot-tag lesson-mascot-tag-yay">Nice!</span>
+              )}
+              {mascotMood === "oops" && (
+                <span className="lesson-mascot-tag lesson-mascot-tag-oops">
+                  That&apos;s how we learn
+                </span>
+              )}
+            </div>
+          )}
         </div>
         <div className="progress-track" aria-hidden="true">
           <div className="progress-fill" style={{ width: `${progressPercent}%` }} />

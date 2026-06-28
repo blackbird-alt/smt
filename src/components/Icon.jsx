@@ -109,6 +109,25 @@ const ICONS = {
       <path d="m6 6 12 12" />
     </>
   ),
+  "trending-up": (
+    <>
+      <path d="M16 7h6v6" />
+      <path d="m22 7-8.5 8.5-5-5L2 17" />
+    </>
+  ),
+  "bar-chart": (
+    <>
+      <line x1="12" x2="12" y1="20" y2="10" />
+      <line x1="18" x2="18" y1="20" y2="4" />
+      <line x1="6" x2="6" y1="20" y2="16" />
+    </>
+  ),
+  award: (
+    <>
+      <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526" />
+      <circle cx="12" cy="8" r="6" />
+    </>
+  ),
 };
 
 export default function Icon({ name, size = 20, strokeWidth = 2, className = "" }) {

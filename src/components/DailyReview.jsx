@@ -15,11 +15,13 @@ export default function DailyReview({
   count = 5,
   onClose,
   onAwardXp,
+  onReviewComplete,
 }) {
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState("answering"); // answering | solved | done
   const [correct, setCorrect] = useState(0);
   const [lastXp, setLastXp] = useState(0);
+  const reportedRef = useRef(false);
 
   // status: "loading" while we try to build a personalized set, then "ready".
   const [status, setStatus] = useState("loading");
@@ -60,6 +62,13 @@ export default function DailyReview({
   const total = problems.length;
   const problem = problems[index];
   const isLast = index >= total - 1;
+
+  // Report aggregate accuracy once, the moment the session wraps up.
+  useEffect(() => {
+    if (phase !== "done" || reportedRef.current) return;
+    reportedRef.current = true;
+    onReviewComplete?.({ correct, total });
+  }, [phase, correct, total, onReviewComplete]);
 
   function handleCorrect() {
     onAwardXp?.(XP_PER_PROBLEM);
