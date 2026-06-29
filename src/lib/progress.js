@@ -190,13 +190,44 @@ function bumpDaily(daily, today, { correct = 0, xp = 0, reviewed = false } = {})
   const base =
     daily && daily.date === today
       ? daily
-      : { date: today, correct: 0, xp: 0, reviewed: false };
+      : { date: today, correct: 0, xp: 0, reviewed: false, claimed: [] };
   return {
     date: today,
     correct: (base.correct || 0) + correct,
     xp: (base.xp || 0) + xp,
     reviewed: Boolean(base.reviewed) || reviewed,
+    // Preserve already-claimed quest rewards so answering more questions never
+    // wipes a claim (and so the same reward can't be granted twice today).
+    claimed: Array.isArray(base.claimed) ? base.claimed : [],
   };
+}
+
+// Grant a daily quest's one-time XP reward. Records the quest id in today's
+// `claimed` list so it can never be claimed twice, and deliberately does NOT
+// touch the daily correct/xp counters (claiming must not advance other quests).
+export async function claimQuestReward(uid, questId, amount) {
+  if (!uid || !questId) return null;
+  const ref = userRef(uid);
+  const snapshot = await getDoc(ref);
+  const profile = snapshot.exists() ? snapshot.data() : {};
+  const today = todayKey();
+  const base =
+    profile.daily && profile.daily.date === today
+      ? profile.daily
+      : { date: today, correct: 0, xp: 0, reviewed: false, claimed: [] };
+  const claimed = new Set(Array.isArray(base.claimed) ? base.claimed : []);
+  if (claimed.has(questId)) return profile;
+  claimed.add(questId);
+
+  const nextXp = (profile.xp || 0) + (amount || 0);
+  const nextDaily = { ...base, date: today, claimed: [...claimed] };
+  await setDoc(
+    ref,
+    { xp: nextXp, daily: nextDaily, updatedAt: serverTimestamp() },
+    { merge: true },
+  );
+  await writePublicProfile(uid, { xp: nextXp });
+  return { ...profile, xp: nextXp, daily: nextDaily };
 }
 
 export async function recordLessonCompletion(uid, lessonId, stepStates) {

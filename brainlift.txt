@@ -6,77 +6,57 @@ Probability & Statistics course modeled on Brilliant. Live: https://stuff-18453.
 OWNERS: Ellie Zhang
 
 PURPOSE
-Decide where AI helps a learner and where it gets in the way, so the interactive
-practice teaches on its own and AI only makes it better. My belief: what works comes from
-learning science and from feeding AI the lesson's real data, not from a bigger model or
-a chatbot.
-In scope: teaching one subject deeply; which AI features earn their place; the
-learning-science that makes practice stick.
-Out of scope: a general chatbot; letting the model grade; covering many subjects thinly.
+Brillyant is a single-subject, learn-by-doing course in Probability & Statistics, modeled on Brilliant. The goal is to build a learning website that uses AI in a way that actually helps learning instead of doing the learning for you, and to make the lessons fun and effective at teaching. For every concept, you start inside a problem, play with interactive features, get instant feedback, and only read the idea behind it once you've tried. The idea is for a beginner to start at zero and come out understanding statistics, because each step was both engaging and effective at teaching.
+
+Position: a course teaches because of its problems and its grounding in real lesson data, not because it has a smarter model bolted on. 
+
+In scope: teaching one subject deeply; which AI features are worth including; the learning-science that improves retention.
+
+Out of scope: a general chatbot; letting the model decide correctness; shallow coverage of many subjects.
 
 DOK 4: SPIKY POINTS OF VIEW
 
-1. The XP, streaks, and confetti I built are a bribe, and bribes can make learning worse.
-   I was proud of the habit loop and assumed points and streaks were pure upside, so this
-   one stung. But the motivation research is brutal: paying people (in points, badges,
-   gold stars) for something they already find interesting reliably lowers their intrinsic
-   drive to do it. So a streak can quietly train a kid to chase the streak instead of the
-   math, and the day the rewards stop, so does the learning. I now treat gamification as
-   training wheels: defensible only to build the early habit, and something the subject
-   itself should replace, not a feature to be proud of.
+1. A course should be mostly problems, not text, because I’ve noticed that a large subset of learners (including myself) skip the reading. Learners skim or ignore written explanations and engage only when there is something to do, so front-loaded exposition is largely wasted. So Brillyant keeps prose minimal and is built almost entirely from problems: the learner starts inside a problem, acts, and reads the underlying idea only when stuck or right. The AI assistant can also give similar problems with their solutions so that users can learn by example.
 
-2. Instant feedback is overrated, and rescuing a stuck learner is usually sabotage.
-   The brief makes instant, specific feedback a hard requirement and I agreed completely,
-   so arguing against it felt wrong. Then productive-failure research changed my mind:
-   letting someone wrestle with a problem they cannot yet solve, and actually fail, primes
-   them to understand the explanation far better than being shown the method up front. The
-   helpful green checkmark and the fast hint often short-circuit the exact struggle that
-   does the teaching. So Brillyant drops you into the problem before any lesson, and the
-   tutor refuses to hand over the answer no matter how you ask.
-
-3. A test is not a measurement. The test is the lesson, and studying is mostly stalling.
-   I assumed you learn by studying and a quiz just checks the result. It is backwards.
-   Pulling an answer out of memory, even when you fail and get corrected, teaches more than
-   rereading the same page, yet nearly everyone rereads because it feels like progress. So
-   Brillyant makes you produce answers first and brings back the ones you missed, instead
-   of letting you re-skim.
+2. Completing a lesson is a very bad signal of learning, and so is re-testing the same missed items every few days. Most "covered" material is forgotten, and finishing a lesson only proves attendance, yet completion is the metric almost every learning app optimizes. The spaced-repetition fix everyone ships (resurface the identical item on a schedule, Anki/Duolingo style) is barely better, because it trains recall of one specific question instead of the skill. For Brylliant, mastery is computed from how many graded steps in a chapter you actually got right (80% to count it as mastered), and when you miss something the app brings the concept back as a brand-new problem with different numbers and a different scenario, generated from what you got wrong, never the original item renumbered. Because the numbers and the scenario change every time, you have to rebuild the method instead of remembering one answer.
 
 EXPERTS
-- Edward Deci & Richard Ryan: self-determination theory; extrinsic rewards can crowd out
-  the intrinsic motivation they are meant to boost.
-- Manu Kapur: productive failure; struggling and failing before instruction deepens
-  later understanding.
-- Roediger & Karpicke: the testing effect; recalling beats rereading.
-- Robert Bjork: desirable difficulties; the conditions that improve learning make practice
-  feel worse in the moment.
+- Roediger & Karpicke: the testing effect; retrieving an answer produces more durable memory than rereading. This is why Brillyant grades by making you recall and solve, and why review regenerates problems instead of just showing the notes again.
+- Manu Kapur: productive failure; attempting a problem before instruction improves later understanding. The core justification for putting the problem before the explanation (SPOV 1).
+- John Sweller: cognitive load and the worked-example effect; for novices, studying a worked solution can beat struggling unaided. The strongest argument against SPOV 1, which is why I bound the struggle with instant feedback and a gated worked solution rather than leaving learners to flail.
+- Robert Bjork: desirable difficulties; spacing and retrieval lower immediate performance but improve long-term retention. Justifies why the app is willing to feel harder now (a tutor that won't hand over the answer, regenerated review) for better recall later.
+- Doug Rohrer & Kelli Taylor: interleaving; mixing problem types beats blocking them on delayed tests. Grounds the Phase 3 review order, which round-robins problems across chapters instead of grouping them.
+- Scott Freeman et al.: active learning outperforms lecture across STEM courses. The empirical backstop for the whole learn-by-doing premise.
 
 DOK 3: INSIGHTS
-- Resurfacing wrong answers carries more weight than any other single feature: it is
-  retrieval, spacing, and error review at once.
-- Regenerated problems must be new scenarios, not renumbered copies, or you train
-  memorizing an answer instead of the skill.
-- "Lesson as data, not HTML" is the keystone: structured steps give instant grading and
-  also give AI real state to ground on, and the model never decides correctness.
+- Resurfacing missed problems combines retrieval practice, spacing, and error review in a single mechanism.
+- Generated practice must use new scenarios, not renumbered copies; otherwise it trains recall of one answer rather than the underlying skill.
+- Representing each lesson as structured data (typed steps), not HTML, enables instant local grading and gives the AI real state to ground on. Correctness is decided in code, never by the model.
 
 DOK 2: KNOWLEDGE TREE
-- Deci, Koestner & Ryan (1999), Psychological Bulletin: meta-analysis; tangible rewards
-  reliably undermined intrinsic motivation for interesting tasks.
-  https://doi.org/10.1037/0033-2909.125.6.627
-- Kapur (2008), Cognition and Instruction: students who struggled on unfamiliar problems
-  before instruction later outperformed those taught directly.
-  https://doi.org/10.1080/07370000802212669
-- Roediger & Karpicke (2006), Psychological Science: tested students recall far more later
-  than restudiers. https://journals.sagepub.com/doi/10.1111/j.1467-9280.2006.01693.x
-- Rohrer & Taylor (2007), Instructional Science: interleaved practice scored about 63% vs
-  20% on a delayed test. https://doi.org/10.1007/s11251-007-9015-8
+- Freeman et al. (2014), PNAS: active learning raised exam scores and cut failure rates from 34% to 22% versus lecture. https://doi.org/10.1073/pnas.1319030111
+- Kapur (2008), Cognition and Instruction: students who struggled on problems before instruction later outperformed those taught directly. https://doi.org/10.1080/07370000802212669
+- Sweller (2006), Educational Psychology Review: the worked-example effect; for novices, studying worked examples can beat solving equivalent problems unaided (the tension SPOV 1 bets against for this audience). https://doi.org/10.1207/s15326985ep4302_1
+- Roediger & Karpicke (2006), Psychological Science: tested students recalled more on a delayed test than students who restudied. https://journals.sagepub.com/doi/10.1111/j.1467-9280.2006.01693.x
+- Rohrer & Taylor (2007), Instructional Science: interleaved practice scored about 63% vs 20% on a delayed test. https://doi.org/10.1007/s11251-007-9015-8
 
 PROCESS (per the brief)
-Tools: Cursor with Claude as an agent; Firebase Hosting; 10 parallel research subagents
-(one per chapter); debugged AI by logging the Worker's real error.
-Phases: Phase 2 shipped a grounded Socratic tutor and an AI review built from mistakes,
-and skipped a generic chatbot, AI-written lessons, and AI grading. Phase 3 added
-interleaved review, a per-chapter mastery signal with a soft "review to master" nudge,
-and a progress panel; retrieval and explanatory feedback came from Phases 1 and 2.
-Code: about 90% agent-written, 10% hand-done (decisions, secrets, content review,
-testing). Biggest lesson: grounding beats prompting, and the model should never decide
-correctness.
+Tools: Cursor with Claude as an agent; Firebase Hosting; up to 20 parallel research subagents; debugged AI by logging the Worker's actual error
+
+Prompting strategies:
+- The main loop: find a thing I need built, ask Claude for a detailed implementation of it, then tweak the details until it fits what I actually want. I let Claude draft because it’s much faster than typing everything myself and I can easily change what they already have to what I need.
+- When it kept getting something wrong, I'd stop describing and instead give it an example to copy, or just tell it to search online rather than guess.
+- For anything the AI touches at runtime, I made it work from the lesson's structured data, not raw text, so I could keep grading in code and keep the model from going off the rails.
+
+Prompts that worked (paraphrased):
+1. "don't hardcode lessons as html. make each lesson a json list of steps where every step has a type and the type picks which react component renders it. i want to add new lessons by just writing json."
+2. "make a step where you drag an outlier on a dot plot and the mean marker follows it but the median barely moves. grade it instantly, and on a wrong answer show my written hint, not just a red x."
+3. "the tutor keeps giving away the answer. feed it the step + the correct answer but tell it that answer is reference only and it can never say it. it CAN make up its own example problems and fully solve those though."
+4. "generate review questions from the ones the user got wrong, same concept different numbers. return strict json, and if the json is broken just fall back to my review set instead of crashing."
+
+Phases: Phase 2 added a Socratic tutor and an AI review built from recorded mistakes, and excluded AI-written lessons and AI grading. Phase 3 added interleaved review, a per-chapter mastery signal with a soft "review to master" prompt, and a progress panel as per learning science; retrieval and explanatory feedback came from Phases 1 and 2.
+
+Code: about 99.5% agent-written, 0.5% hand-done (design decisions, secrets, content review,
+testing). 
+
+Main lesson: The coding model is MUCH faster than I am and can do much better. However, it is also exceedingly bad at coming up with good lesson plans and deciding the types of figures that humans find useful to learning. Things that include human taste and planning should be left up to me to decide.

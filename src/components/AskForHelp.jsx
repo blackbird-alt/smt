@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { isAiHelpEnabled, requestHelp } from "../lib/ai";
+import Mascot from "./Mascot";
 import Icon from "./Icon";
 
 const QUICK_PROMPTS = [
@@ -57,33 +58,38 @@ export default function AskForHelp({ step, attempt, lessonId }) {
     return (
       <button
         type="button"
-        className="ask-help-trigger btn-icon-text"
+        className="ask-help-trigger"
         onClick={() => setOpen(true)}
       >
-        <Icon name="sparkles" size={16} /> Confused? Ask for help
+        <Mascot mood="wave" size={40} />
+        <span className="ask-help-trigger-text">
+          <strong>Stuck? Ask Sig</strong>
+          <span>Your AI tutor — hints, not answers</span>
+        </span>
       </button>
     );
   }
 
   return (
-    <section className="ask-help" aria-label="AI help">
+    <section className="ask-help" aria-label="Sig, your AI tutor">
       <div className="ask-help-head">
         <span className="ask-help-title">
-          <Icon name="sparkles" size={16} /> Ask for help
+          <Mascot mood={busy ? "thinking" : "happy"} size={34} />
+          Sig · your AI tutor
         </span>
         <button
           type="button"
           className="ask-help-close"
           onClick={() => setOpen(false)}
-          aria-label="Close help"
+          aria-label="Close tutor"
         >
           <Icon name="x" size={16} />
         </button>
       </div>
 
       <p className="ask-help-note">
-        Tell me what's confusing — I'll explain and nudge you, but I won't give
-        away the answer.
+        Hi, I'm Sig! Tell me what's confusing and I'll explain and nudge you in
+        the right direction — but I won't just hand over the answer.
       </p>
 
       <div className="ask-help-thread" ref={threadRef}>

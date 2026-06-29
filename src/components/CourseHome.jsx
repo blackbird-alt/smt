@@ -37,6 +37,18 @@ const FLOATING_GLYPHS = [
   { c: "θ", top: "57%", left: "50%", size: "3rem", color: "var(--primary-2)" },
 ];
 
+// Short quips Sig cycles through when poked — playful, but each smuggles in a
+// bit of the learning science (or a memorable stats fact).
+const SIG_TIPS = [
+  "Tip: getting one wrong, then fixing it, beats getting it right first try. Really.",
+  "Spacing beats cramming — a little every day sticks far better.",
+  "Fun fact: the median shrugs off outliers. The mean totally panics.",
+  "Mixing topics feels harder but locks in more. That's the whole point.",
+  "Pull the answer out of memory before you peek — that's where the magic is.",
+  "Correlation isn't causation. Ice cream doesn't cause shark attacks. 🦈",
+  "Stuck on a problem? Ask me in the lesson — I give hints, not answers.",
+];
+
 export default function CourseHome({
   profile,
   user,
@@ -46,6 +58,7 @@ export default function CourseHome({
   onOpenLeaderboard,
   onOpenInsights,
   onOpenAchievements,
+  onClaimQuest,
   onPracticeMistakes,
   hasMistakes = false,
 }) {
@@ -243,7 +256,11 @@ export default function CourseHome({
         </div>
       </header>
 
-      <MascotGreeter mood={mascotMood} message={greeting} />
+      <MascotGreeter
+        baseMood={mascotMood}
+        defaultMessage={greeting}
+        tips={SIG_TIPS}
+      />
 
       <section className="stats-row">
         <div className="stat-card">
@@ -277,7 +294,7 @@ export default function CourseHome({
         </div>
       </section>
 
-      <Quests profile={profile} />
+      <Quests profile={profile} onClaim={onClaimQuest} />
 
       <section className="home-actions-row">
         {hasMistakes && (

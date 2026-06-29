@@ -64,6 +64,7 @@ function AuthedApp({ user, refreshUser }) {
     restartLesson,
     refreshProfile,
     grantXp,
+    claimQuest,
   } = useProgress(user);
   const [activeLessonId, setActiveLessonId] = useState(null);
   const [localProgress, setLocalProgress] = useState(null);
@@ -307,6 +308,7 @@ function AuthedApp({ user, refreshUser }) {
       onOpenLeaderboard={() => setShowLeaderboard(true)}
       onOpenInsights={() => setShowInsights(true)}
       onOpenAchievements={() => setShowAchievements(true)}
+      onClaimQuest={claimQuest}
       onPracticeMistakes={openMistakePractice}
       hasMistakes={hasMistakes}
     />

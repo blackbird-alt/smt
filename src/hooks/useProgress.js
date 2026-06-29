@@ -11,6 +11,7 @@ import {
   saveLessonStep,
   saveLessonStepIndex,
   awardXp,
+  claimQuestReward,
 } from "../lib/progress";
 
 const LESSON_IDS = course.lessons.map((lesson) => lesson.id);
@@ -152,6 +153,15 @@ export function useProgress(user) {
     [user],
   );
 
+  const claimQuest = useCallback(
+    async (questId, amount) => {
+      if (!user || !questId) return;
+      const updated = await claimQuestReward(user.uid, questId, amount);
+      if (updated) setProfile(updated);
+    },
+    [user],
+  );
+
   return {
     profile: user ? profile : null,
     lessonProgress: user ? lessonProgress : {},
@@ -162,6 +172,7 @@ export function useProgress(user) {
     restartLesson,
     refreshProfile,
     grantXp,
+    claimQuest,
     isLessonInProgress,
   };
 }

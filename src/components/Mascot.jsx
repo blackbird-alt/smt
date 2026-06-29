@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
+
 // "Sig" — Brillyant's friendly stats mascot. A rounded character (with a little
 // sigma on its belly) drawn as themeable inline SVG, so it ships with zero image
 // assets and recolors automatically in light/dark mode. The `mood` prop swaps the
-// eyes/mouth so Sig can idle, cheer, think, or react to a miss.
+// eyes/mouth and drives the animation (idle bob, blink, arm wave, cheer, etc.).
 const MOODS = {
   idle: { eyes: "open", mouth: "smile" },
   happy: { eyes: "happy", mouth: "grin" },
@@ -10,6 +12,8 @@ const MOODS = {
   oops: { eyes: "worried", mouth: "small" },
   wave: { eyes: "open", mouth: "grin" },
 };
+
+const BLINKABLE = new Set(["open", "look", "worried"]);
 
 function Eyes({ kind }) {
   if (kind === "happy") {
@@ -66,6 +70,7 @@ function Mouth({ kind }) {
 export default function Mascot({ mood = "idle", size = 96, className = "", animate = true }) {
   const face = MOODS[mood] || MOODS.idle;
   const animClass = animate ? `mascot-anim-${mood}` : "";
+  const canBlink = animate && BLINKABLE.has(face.eyes);
 
   return (
     <svg
@@ -88,8 +93,13 @@ export default function Mascot({ mood = "idle", size = 96, className = "", anima
       <ellipse cx="34" cy="88" rx="7" ry="4" className="mascot-foot" />
       <ellipse cx="56" cy="88" rx="7" ry="4" className="mascot-foot" />
 
-      {/* body */}
+      {/* everything that bobs/cheers together */}
       <g className="mascot-body-group">
+        {/* arms (behind the body so only the nubs show) */}
+        <ellipse cx="13" cy="58" rx="5.5" ry="7.5" className="mascot-arm mascot-arm-left" />
+        <ellipse cx="77" cy="58" rx="5.5" ry="7.5" className="mascot-arm mascot-arm-right" />
+
+        {/* body */}
         <rect x="14" y="20" width="62" height="68" rx="31" className="mascot-body" />
         {/* ear tufts */}
         <path d="M26 22c-3-9-1-14 3-15 3 3 4 9 3 15z" className="mascot-ear" />
@@ -100,7 +110,9 @@ export default function Mascot({ mood = "idle", size = 96, className = "", anima
           σ
         </text>
         {/* face */}
-        <Eyes kind={face.eyes} />
+        <g className={`mascot-eyes ${canBlink ? "mascot-eyes-blink" : ""}`}>
+          <Eyes kind={face.eyes} />
+        </g>
         <Mouth kind={face.mouth} />
         {/* cheeks */}
         <circle cx="27" cy="50" r="3.2" className="mascot-cheek" />
@@ -110,13 +122,41 @@ export default function Mascot({ mood = "idle", size = 96, className = "", anima
   );
 }
 
-// Mascot paired with a speech bubble — used as the dashboard greeter.
-export function MascotGreeter({ mood = "wave", message, size = 84 }) {
+// Sig paired with a speech bubble — the dashboard greeter. Poking Sig replays a
+// happy cheer and rotates through short tips, so the mascot rewards curiosity.
+export function MascotGreeter({ defaultMessage, tips = [], baseMood = "wave", size = 84 }) {
+  const [tipIndex, setTipIndex] = useState(-1);
+  const [reactKey, setReactKey] = useState(0);
+  const [reacting, setReacting] = useState(false);
+
+  useEffect(() => {
+    if (!reacting) return undefined;
+    const timer = setTimeout(() => setReacting(false), 750);
+    return () => clearTimeout(timer);
+  }, [reactKey, reacting]);
+
+  function poke() {
+    if (tips.length > 0) setTipIndex((i) => i + 1);
+    setReactKey((k) => k + 1);
+    setReacting(true);
+  }
+
+  const message = tipIndex < 0 ? defaultMessage : tips[tipIndex % tips.length];
+  const mood = reacting ? "celebrate" : baseMood;
+
   return (
     <div className="mascot-greeter">
-      <Mascot mood={mood} size={size} />
+      <button
+        type="button"
+        className="mascot-poke"
+        onClick={poke}
+        aria-label="Poke Sig for a tip"
+        title="Poke me!"
+      >
+        <Mascot key={reactKey} mood={mood} size={size} />
+      </button>
       {message && (
-        <div className="mascot-bubble" role="status">
+        <div className="mascot-bubble" role="status" aria-live="polite">
           {message}
         </div>
       )}

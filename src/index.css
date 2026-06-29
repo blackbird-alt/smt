@@ -3655,14 +3655,56 @@ textarea::placeholder {
 
 /* ===== AI "Ask for help" assistant ===== */
 .ask-help-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
   margin-top: 1rem;
-  border: 1px dashed var(--primary);
+  border: 1px solid color-mix(in srgb, var(--primary) 35%, var(--border));
   background: var(--primary-soft);
-  color: var(--primary);
-  border-radius: 0.75rem;
-  padding: 0.6rem 0.9rem;
-  font-weight: 700;
+  color: var(--primary-strong);
+  border-radius: 0.9rem;
+  padding: 0.6rem 0.85rem;
+  text-align: left;
   cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.ask-help-trigger:hover {
+  transform: translateY(-1px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-card);
+}
+
+.ask-help-trigger .mascot {
+  flex-shrink: 0;
+}
+
+.ask-help-trigger-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.ask-help-trigger-text strong {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.ask-help-trigger-text span {
+  font-size: 0.78rem;
+  color: var(--text-muted-2);
+  font-weight: 600;
+}
+
+.ask-help-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.ask-help-title .mascot {
+  flex-shrink: 0;
 }
 
 .ask-help {
@@ -4080,6 +4122,12 @@ textarea::placeholder {
   fill: var(--primary);
 }
 
+.mascot-arm {
+  fill: var(--primary-2);
+  transform-box: fill-box;
+  transform-origin: center top;
+}
+
 .mascot-sparkles {
   fill: var(--joy);
 }
@@ -4107,6 +4155,89 @@ textarea::placeholder {
   .mascot-sparkles {
     animation: mascotSparkle 700ms ease-in-out infinite alternate;
   }
+
+  /* Eyes blink periodically (only on open-style eyes) */
+  .mascot-eyes-blink {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: mascotBlink 4.8s ease-in-out infinite;
+  }
+
+  /* Arms: idle sway, an actual wave on greeting, both up to cheer */
+  .mascot-anim-idle .mascot-arm-right,
+  .mascot-anim-happy .mascot-arm-right {
+    animation: armSway 3.8s ease-in-out infinite;
+  }
+
+  .mascot-anim-wave .mascot-arm-right {
+    animation: armWave 1.1s ease-in-out infinite;
+  }
+
+  .mascot-anim-celebrate .mascot-arm-left {
+    animation: armCheerLeft 600ms cubic-bezier(0.2, 1.3, 0.3, 1);
+  }
+
+  .mascot-anim-celebrate .mascot-arm-right {
+    animation: armCheerRight 600ms cubic-bezier(0.2, 1.3, 0.3, 1);
+  }
+
+  /* Hover: Sig perks up wherever he's interactive */
+  .mascot-poke:hover .mascot-body-group,
+  .ask-help-trigger:hover .mascot-body-group {
+    animation: mascotCheer 600ms cubic-bezier(0.2, 1.3, 0.3, 1);
+  }
+}
+
+@keyframes mascotBlink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.12); }
+}
+
+@keyframes armWave {
+  0%, 100% { transform: rotate(10deg); }
+  50% { transform: rotate(-26deg); }
+}
+
+@keyframes armSway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-10deg); }
+}
+
+@keyframes armCheerLeft {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(28deg); }
+  100% { transform: rotate(10deg); }
+}
+
+@keyframes armCheerRight {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-28deg); }
+  100% { transform: rotate(-10deg); }
+}
+
+/* Poke button wrapper around Sig in the greeter */
+.mascot-poke {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 0;
+  border-radius: 50%;
+  transition: transform 140ms cubic-bezier(0.2, 1.4, 0.35, 1);
+}
+
+.mascot-poke:hover {
+  transform: scale(1.06);
+}
+
+.mascot-poke:active {
+  transform: scale(0.92);
+}
+
+.mascot-poke:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
 }
 
 @keyframes mascotBob {
@@ -4169,68 +4300,6 @@ textarea::placeholder {
   background: var(--surface);
   border-left: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-}
-
-/* Lesson header mascot reaction */
-.lesson-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.lesson-meta-text {
-  min-width: 0;
-}
-
-.lesson-mascot {
-  position: relative;
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-}
-
-.lesson-mascot-tag {
-  position: absolute;
-  top: -0.5rem;
-  right: -0.25rem;
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  padding: 0.18rem 0.45rem;
-  border-radius: 999px;
-  white-space: nowrap;
-  box-shadow: var(--shadow-card);
-  animation: tagPop 240ms cubic-bezier(0.2, 1.4, 0.3, 1);
-}
-
-.lesson-mascot-tag-yay {
-  background: var(--success-bg);
-  color: var(--success-text);
-  border: 1px solid var(--success-border);
-}
-
-.lesson-mascot-tag-oops {
-  background: var(--hint-bg);
-  color: var(--hint-text);
-  border: 1px solid var(--hint-border);
-}
-
-@keyframes tagPop {
-  0% { opacity: 0; transform: scale(0.6) translateY(4px); }
-  100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .lesson-mascot-tag {
-    animation: none;
-  }
-}
-
-@media (max-width: 420px) {
-  .lesson-mascot {
-    display: none;
-  }
 }
 
 /* =====================================================================
@@ -4321,10 +4390,10 @@ textarea::placeholder {
 
 .quest-row-top {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.15rem;
 }
 
 .quest-name {
@@ -4337,20 +4406,74 @@ textarea::placeholder {
   color: var(--text-muted-2);
 }
 
+.quest-reward {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex-shrink: 0;
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: var(--primary-strong);
+  background: var(--primary-soft);
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+}
+
+.quest-reward .icon {
+  color: var(--joy);
+}
+
+.quest-reward-claimed {
+  color: var(--text-muted);
+  background: var(--surface-muted);
+}
+
+.quest-how {
+  margin: 0 0 0.45rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--text-muted-2);
+}
+
+.quest-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
 .quest-label {
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-muted);
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
+  min-width: 3.5rem;
+  text-align: right;
 }
 
 .quest-track {
   display: block;
+  flex: 1;
   height: 0.4rem;
   border-radius: 999px;
   background: var(--surface-muted);
   overflow: hidden;
+}
+
+.quest-claim-btn {
+  margin-top: 0.55rem;
+  padding: 0.5rem 0.95rem;
+  font-size: 0.85rem;
+}
+
+.quest-claimed-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--success-fg);
 }
 
 .quest-fill {
